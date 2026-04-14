@@ -9,7 +9,7 @@
     <meta name="theme-color" content="#35251A">
     <link rel="apple-touch-icon" href="icon.png">
     
-    <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Varela+Round&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/html5-qrcode"></script>
     <style>
         :root {
@@ -31,7 +31,7 @@
         body {
             background-color: var(--bg-warm);
             color: var(--text-main);
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Varela Round', sans-serif; /* Tipografía más redondita y amigable */
             text-align: center; margin: 0; padding: 0;
             display: flex; flex-direction: column; align-items: center;
             min-height: 100vh;
@@ -91,7 +91,20 @@
             border-radius: 20px; overflow: hidden; border: none;
             background-color: #000;
             box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
-            border: 4px solid var(--brand-dark); /* Marco distintivo */
+            border: 4px solid var(--brand-dark); 
+        }
+
+        /* Estilo para el botón de permiso de cámara que inyecta html5-qrcode */
+        #reader button {
+            background-color: var(--brand-dark);
+            color: var(--brand-light);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 14px;
+            font-family: 'Varela Round', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 20px;
         }
 
         .separador { margin: 30px 0 20px 0; color: var(--text-secondary); font-size: 11px; text-transform: uppercase; letter-spacing: 2px; font-weight: 600;}
@@ -105,14 +118,14 @@
         .input-manual-group input:focus { border-color: var(--brand-dark); background-color: #fff;}
         
         .btn-buscar-manual {
-            width: 100%; background-color: #E6DED5; color: var(--brand-dark); border: none; padding: 16px; border-radius: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s; font-size: 15px;
+            width: 100%; background-color: #E6DED5; color: var(--brand-dark); border: none; padding: 16px; border-radius: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s; font-size: 15px; font-family: 'Varela Round', sans-serif;
         }
         .btn-buscar-manual:active { background-color: #D5CCC3; }
 
         /* --- ACCIONES (MODAL CENTRAL) --- */
         #pantallaAcciones {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(53, 37, 26, 0.6); /* Fondo marrón oscuro translúcido */
+            background: rgba(53, 37, 26, 0.6); 
             z-index: 1000; display: none; align-items: center; justify-content: center;
             padding: 20px; box-sizing: border-box; backdrop-filter: blur(5px);
         }
@@ -141,23 +154,39 @@
         }
         .estado-sellos-texto { font-size: 13px; color: var(--text-secondary); margin-bottom: 5px; font-weight: 600;}
         .estado-sellos-numero { color: var(--brand-dark); font-weight: 700; font-size: 42px; line-height: 1; font-family: 'Lilita One', cursive;}
-        .estado-sellos-numero span { font-size: 18px; opacity: 0.5; font-family: 'Poppins', sans-serif;}
+        .estado-sellos-numero span { font-size: 18px; opacity: 0.5; font-family: 'Varela Round', sans-serif;}
 
-        /* --- BOTONES MODERNOS --- */
+        /* --- BOTONES MODERNOS CORREGIDOS --- */
         .btn-stack { display: flex; flex-direction: column; gap: 12px; width: 100%;}
         .btn {
-            width: 100%; padding: 18px; border-radius: 18px;
+            width: 100%; padding: 18px; 
+            border-radius: 24px; /* Bordes más redondeados */
             border: none; font-size: 16px; font-weight: 600; cursor: pointer;
-            transition: all 0.1s ease; font-family: 'Poppins', sans-serif;
+            transition: all 0.2s ease; font-family: 'Varela Round', sans-serif;
         }
         
-        /* Botón Marrón Principal */
-        .btn-brand { background: var(--brand-gradient); color: var(--brand-light); box-shadow: 0 6px 0 #1A110A; margin-bottom: 6px;}
-        .btn-brand:active { transform: translateY(6px); box-shadow: 0 0px 0 #1A110A; } /* Efecto de hundimiento */
+        /* Botón Marrón Principal - Sin efecto aplastar */
+        .btn-brand { 
+            background: var(--brand-gradient); 
+            color: var(--brand-light); 
+            box-shadow: 0 4px 15px rgba(53, 37, 26, 0.2); /* Sombra difuminada suave */
+        }
+        .btn-brand:active { 
+            transform: scale(0.98); /* Ligero efecto de escala en lugar de movimiento vertical */
+            box-shadow: 0 2px 8px rgba(53, 37, 26, 0.2); 
+        } 
         
-        /* Oro para canjear */
-        .btn-gold { background-color: #D4AF37; color: #fff; display: none; box-shadow: 0 6px 0 #997A00; margin-bottom: 6px;}
-        .btn-gold:active { transform: translateY(6px); box-shadow: 0 0px 0 #997A00; }
+        /* Oro para canjear - Sin efecto aplastar */
+        .btn-gold { 
+            background-color: #D4AF37; 
+            color: #fff; 
+            display: none; 
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+        }
+        .btn-gold:active { 
+            transform: scale(0.98); 
+            box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
+        }
         
         .btn-outlined { background-color: transparent; border: 1.5px solid var(--border-warm); color: var(--text-secondary); padding: 14px; font-size: 14px;}
         .btn-outlined:active { background-color: rgba(53,37,26,0.05); }
@@ -171,20 +200,25 @@
         <h2 style="font-family: 'Lilita One', cursive; color: var(--brand-dark); font-size: 32px;">BRUNA CAJA</h2>
         <p style="color: var(--text-secondary); margin-bottom: 30px; font-size: 14px;">Ingresa el PIN para operar</p>
         <input type="password" id="inputPin" class="pin-input" placeholder="****" maxlength="4" inputmode="numeric">
-        <button id="btnDesbloquear" class="btn btn-brand" style="max-width: 200px;">Desbloquear</button>
+        <button id="btnDesbloquear" class="btn btn-brand" style="max-width: 200px;">Desbloquear Caja</button>
     </div>
 
     <div class="main-container">
         <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 15px; padding: 0 5px;">
             <h1>BRUNA</h1>
-            <div style="font-size: 10px; color: var(--text-secondary); font-family: monospace; font-weight: bold;">SCANNER v1.2</div>
+            <div style="font-size: 10px; color: var(--text-secondary); font-family: monospace; font-weight: bold;">SCANNER v1.3</div>
         </div>
 
         <div id="mensajeLoader">Buscando tarjeta...</div>
 
         <div id="pantallaBusqueda" class="modern-card">
             <p style="color: var(--text-secondary); font-size: 13px; margin-top: 0; margin-bottom: 20px;">Apunta al QR con la cámara</p>
+            
             <div id="reader"></div>
+            
+            <div id="errorCamara" style="display: none; color: #E74C3C; font-size: 13px; margin-bottom: 20px;">
+                No se pudo activar la cámara. Por favor, usa la búsqueda manual.
+            </div>
             
             <div class="separador">o ingresa celular</div>
             
@@ -216,7 +250,7 @@
                 
                 <div style="display: flex; gap: 10px; width: 100%; margin-top: 10px;">
                     <button id="btnRestar" class="btn btn-outlined" style="flex: 1;">Corregir (-1)</button>
-                    <button id="btnVolver" class="btn btn-outlined" style="flex: 1; border-color: #FADBD8; color: #E74C3C;">Cerrar</button>
+                    <button id="btnVolver" class="btn btn-outlined" style="flex: 1; border-color: #FADBD8; color: #E74C3C;">Cerrar Ficha</button>
                 </div>
             </div>
         </div>
@@ -245,17 +279,18 @@
                 this.html5QrCode = null;
                 this.clienteActualId = null;
                 this.puntosActuales = 0;
-                this.pinCorrecto = "2026"; // PIN de acceso
+                this.pinCorrecto = "2026"; 
 
                 this.ui = {
                     login: document.getElementById('pantallaLogin'),
                     busqueda: document.getElementById('pantallaBusqueda'),
                     acciones: document.getElementById('pantallaAcciones'),
                     loader: document.getElementById('mensajeLoader'),
-                    pinInput: document.getElementById('inputPin')
+                    pinInput: document.getElementById('inputPin'),
+                    errorCamara: document.getElementById('errorCamara')
                 };
 
-                this.audioBeep = new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU'); // Sonido beep genérico en base64
+                this.audioBeep = new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU'); 
 
                 this.iniciarEventos();
                 this.verificarSeguridad();
@@ -278,15 +313,13 @@
                 document.getElementById('btnVolver').addEventListener('click', () => this.volverABuscar());
             }
 
-            // --- EXPERIENCIA DE USUARIO ---
             reproducirBeep() {
-                try { this.audioBeep.play().catch(e=>{}); } catch(e){} // Intenta sonar, ignora si el navegador lo bloquea
+                try { this.audioBeep.play().catch(e=>{}); } catch(e){} 
             }
             vibrar(patron) {
                 if ("vibrate" in navigator) { navigator.vibrate(patron); }
             }
 
-            // --- SEGURIDAD ---
             verificarSeguridad() {
                 if (localStorage.getItem('baristaAutorizado') === 'true') {
                     this.ui.login.style.display = 'none';
@@ -302,7 +335,7 @@
                     this.iniciarCamara();
                 } else {
                     this.ui.pinInput.classList.add('error-shake');
-                    this.vibrar([100, 50, 100]); // Vibración de error
+                    this.vibrar([100, 50, 100]); 
                     setTimeout(() => {
                         this.ui.pinInput.classList.remove('error-shake');
                         this.ui.pinInput.value = '';
@@ -310,9 +343,11 @@
                 }
             }
 
-            // --- CÁMARA ---
             iniciarCamara() {
+                this.ui.errorCamara.style.display = 'none';
                 if (!this.html5QrCode) { this.html5QrCode = new Html5Qrcode("reader"); }
+                
+                // Configuración para pedir permiso en el idioma local (manejado por el navegador/librería)
                 this.html5QrCode.start(
                     { facingMode: "environment" }, 
                     { fps: 10, qrbox: { width: 180, height: 180 } },
@@ -320,7 +355,7 @@
                     () => { }
                 ).catch((err) => {
                     console.error("Fallo cámara: ", err);
-                    document.getElementById('reader').innerHTML = '<p style="color:#E74C3C; padding:30px; font-size:12px;">Permitir acceso a cámara.</p>';
+                    this.ui.errorCamara.style.display = 'block'; // Mostramos el mensaje de error personalizado
                 });
             }
 
@@ -337,7 +372,6 @@
                 this.buscarClienteEnFirebase(decodedText);
             }
 
-            // --- LÓGICA DE DATOS ---
             async buscarClienteEnFirebase(telefono) {
                 this.ui.busqueda.style.display = 'none';
                 this.ui.loader.style.display = 'block';
@@ -395,7 +429,7 @@
                     
                     this.puntosActuales += cantidad;
                     document.getElementById('uiSellos').innerText = this.puntosActuales;
-                    this.vibrar(50); // Confirmación táctil
+                    this.vibrar(50); 
                     
                     this.actualizarBotonesAccion();
 
@@ -411,7 +445,7 @@
                 if(confirm("¿Confirmas entrega de bebida gratis?")) {
                   try {
                         const docRef = doc(this.db, "clientes", this.clienteActualId);
-                        const fechaAutomatica = new Date().toISOString();
+                        const fechaAutomatica = new Date().toISOString(); 
                         
                         await updateDoc(docRef, { 
                             puntos: 0,
@@ -419,7 +453,7 @@
                             totalPremiosCanjeados: increment(1) 
                         }); 
                         
-                        this.vibrar([100, 50, 100, 50, 200]); // Vibración de éxito larga
+                        this.vibrar([100, 50, 100, 50, 200]); 
                         alert("¡Premio registrado correctamente!");
                         this.volverABuscar(); 
                     } catch(e) {
@@ -440,7 +474,7 @@
 
         // Iniciar App
         window.onload = () => {
-            window.miCaja = new BaristaApp(); // Lo atamos a window para que el 'onclick' del modal funcione
+            window.miCaja = new BaristaApp(); 
         };
     </script>
 </body>
