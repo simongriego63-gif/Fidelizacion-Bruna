@@ -13,7 +13,7 @@
         :root {
             /* Paleta BRUNA */
             --bg-warm: #F8F4E6;
-            --card-white: #ffffff;
+            --card-white: #FDFAF0; /* Tono crema suave para la tarjeta de registro */
             --brand-dark: #35251A;
             --brand-gradient: linear-gradient(135deg, #3A2A1E 0%, #1A110A 100%);
             --brand-light: #F2E3A4;
@@ -52,7 +52,7 @@
         .input-box {
             width: 100%; padding: 18px; border-radius: 14px; border: 1.5px solid var(--border-warm);
             font-size: 16px; box-sizing: border-box; font-family: 'Poppins', sans-serif;
-            background-color: #fcfcfc; transition: border-color 0.2s;
+            background-color: #FFFDF7; transition: border-color 0.2s;
         }
         .input-box:focus { border-color: var(--brand-dark); outline: none; background-color: #fff;}
         
@@ -131,16 +131,24 @@
             0% { transform: translateY(10px) scale(0.9); opacity: 0; }
             100% { transform: translateY(0) scale(1); opacity: 1; }
         }
+        /* Animación de humo más elevada y suave */
         @keyframes subirHumo {
-            0% { transform: translateY(2px); opacity: 0; }
-            50% { opacity: 1; }
-            100% { transform: translateY(-4px); opacity: 0; }
+            0% { transform: translateY(8px); opacity: 0; }
+            40% { opacity: 0.6; } /* Opacidad sutil */
+            100% { transform: translateY(-15px); opacity: 0; }
         }
 
         .stamp-cup.filled { transform: scale(1.08); }
         .stamp-cup.filled .cup-path { fill: var(--cup-marked-bg); stroke: var(--cup-marked-bg); }
         .stamp-cup.filled .coffee-fill { fill: var(--cup-filled-coffee); animation: llenarCafe 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-        .stamp-cup.filled .steam-path { stroke: var(--cup-filled-steam); stroke-width: 1.5; stroke-linecap: round; animation: subirHumo 2.5s ease-in-out infinite 0.4s; }
+        
+        /* Estilos aplicados al humo recto */
+        .stamp-cup.filled .steam-path { 
+            stroke: var(--cup-filled-steam); 
+            stroke-width: 1.8; 
+            stroke-linecap: round; 
+            animation: subirHumo 2.8s ease-out infinite 0.4s; 
+        }
 
         .stamps-text { text-align: center; font-size: 11px; opacity: 0.8; margin: 0; color: #fff;}
 
@@ -247,7 +255,7 @@
                 
                 this.app = initializeApp(firebaseConfig);
                 this.db = getFirestore(this.app);
-                this.unsubscribe = null; // Para limpiar la conexión de Firebase al salir
+                this.unsubscribe = null;
 
                 // Elementos UI
                 this.ui = {
@@ -324,7 +332,7 @@
             abrirTarjeta(celular) {
                 this.cambiarPantalla('tarjeta');
                 
-                // Generar QR adaptado a los colores de la marca
+                // Generar QR
                 this.ui.qr.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${celular}&bgcolor=F2E3A4&color=35251A`;
                 this.ui.telLabel.innerText = `******${celular.slice(-4)}`;
 
@@ -360,7 +368,7 @@
                 // Lógica de celebración
                 if(puntosActuales >= totalTazas) {
                     this.ui.premio.innerText = "¡BEBIDA LISTA!";
-                    this.ui.premio.classList.add('premio-listo'); // Aplica animación CSS
+                    this.ui.premio.classList.add('premio-listo');
                 } else {
                     this.ui.premio.innerText = "Aún sin premios";
                     this.ui.premio.classList.remove('premio-listo');
@@ -371,7 +379,7 @@
             obtenerSvgTaza() {
                 return `
                 <svg class="stamp-cup" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                    <path class="steam-path" d="M35,15 Q40,5 45,15 T55,15 M55,20 Q60,10 65,20 T75,20" />
+                    <path class="steam-path" d="M38,30 V12 M50,32 V8 M62,30 V16" stroke-linecap="round"/>
                     <path class="cup-path" d="M20,35 H80 V75 Q80,90 65,90 H35 Q20,90 20,75 Z" />
                     <path class="coffee-fill" d="M22,37 H78 V73 Q78,88 63,88 H37 Q22,88 22,73 Z" />
                     <path class="cup-path" d="M80,45 Q95,45 95,60 T80,75" />
@@ -379,7 +387,7 @@
             }
 
             cerrarSesion() {
-                if (this.unsubscribe) this.unsubscribe(); // Desconecta Firebase
+                if (this.unsubscribe) this.unsubscribe(); 
                 localStorage.removeItem('miTarjetaCafeTEL');
                 location.reload();
             }
