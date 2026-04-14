@@ -3,155 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Panel - Club Café Pro</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Panel - BRUNA Admin</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Varela+Round&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
     <style>
         :root {
-            --bg-warm: #FAF5F0; --card-white: #ffffff;
-            --brand-marine: #1A4D7C; --brand-marine-gradient: linear-gradient(135deg, #1A4D7C 0%, #0D3153 100%);
-            --text-main: #2C3E50; --text-secondary: #7F8C8D;
-            --border-warm: #E0D7D0;
+            var(--bg-warm): #F8F4E6; 
+            --card-white: #FDFAF0; 
+            --brand-dark: #35251A; 
+            --brand-gradient: linear-gradient(135deg, #3A2A1E 0%, #1A110A 100%);
+            --brand-light: #F2E3A4; 
+            --text-main: #35251A;
+            --text-secondary: #8C7A6B;
+            --border-warm: #E6DED5;
         }
 
         body {
-            background-color: var(--bg-warm); color: var(--text-main);
-            font-family: 'Poppins', sans-serif; margin: 0; padding: 15px;
+            background-color: #F8F4E6; color: var(--text-main);
+            font-family: 'Varela Round', sans-serif; margin: 0; padding: 15px;
             display: flex; flex-direction: column; align-items: center;
             min-height: 100vh; -webkit-font-smoothing: antialiased;
         }
 
-        .main-container { width: 100%; max-width: 900px; padding-top: 10px; }
-        h1 { color: var(--brand-marine); margin: 0 0 5px 0; font-size: 22px; font-weight: 700;}
+        .main-container { width: 100%; max-width: 1000px; padding-top: 10px; }
+        h1 { font-family: 'Lilita One', cursive; color: var(--brand-dark); margin: 0 0 5px 0; font-size: 28px; letter-spacing: 1px;}
         
-        /* LOGIN DUEÑO */
         #pantallaLogin {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: var(--bg-warm); z-index: 2000;
+            background-color: #F8F4E6; z-index: 2000;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
         }
         .pin-input {
             padding: 18px; border-radius: 14px; border: 2px solid var(--border-warm); font-size: 32px;
             text-align: center; width: 100%; max-width: 200px; margin-bottom: 25px; letter-spacing: 10px;
-            font-weight: bold; color: var(--brand-marine); font-family: monospace;
+            font-weight: bold; color: var(--brand-dark); font-family: monospace; background-color: var(--card-white);
             transition: all 0.3s;
         }
-        .pin-input:focus { border-color: var(--brand-marine); outline: none; box-shadow: 0 0 10px rgba(26,77,124,0.1); }
+        .pin-input:focus { border-color: var(--brand-dark); outline: none; box-shadow: 0 0 10px rgba(53, 37, 26, 0.15); }
         .btn {
-            background: var(--brand-marine-gradient); color: white; border: none; padding: 16px 30px;
-            border-radius: 16px; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 16px;
+            background: var(--brand-gradient); color: var(--brand-light); border: none; padding: 16px 30px;
+            border-radius: 20px; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 16px; font-family: 'Varela Round', sans-serif;
+            box-shadow: 0 4px 15px rgba(53, 37, 26, 0.2);
         }
-        .btn:active { transform: scale(0.95); }
+        .btn:active { transform: scale(0.96); box-shadow: 0 2px 8px rgba(53, 37, 26, 0.2); }
 
         #pantallaDashboard { display: none; width: 100%; }
         
-        /* FILTROS */
-        .filter-section {
-            display: flex; gap: 10px; margin-top: 15px; align-items: center;
-            background: var(--card-white); padding: 15px; border-radius: 16px; border: 1px solid var(--border-warm);
-        }
-        .input-mes {
-            padding: 10px; border-radius: 10px; border: 1.5px solid var(--border-warm); font-family: 'Poppins'; color: var(--text-main); font-weight: 600;
-        }
-
-        /* TARJETAS SUPERIORES */
-        .stats-grid {
-            display: grid; grid-template-columns: repeat(3, 1fr);
-            gap: 10px; margin: 20px 0;
-        }
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 20px 0; }
         .stat-card {
-            background: var(--card-white); padding: 15px; border-radius: 16px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03); text-align: center;
+            background: var(--card-white); padding: 20px 15px; border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(53,37,26,0.05); text-align: center;
             border: 1px solid var(--border-warm); display: flex; flex-direction: column; justify-content: center;
         }
-        .stat-value { font-size: 32px; font-weight: 700; color: var(--brand-marine); line-height: 1; margin-bottom: 2px;}
-        .stat-label { font-size: 10px; color: var(--text-secondary); text-transform: uppercase; font-weight: 600; opacity: 0.8;}
+        .stat-value { font-family: 'Lilita One', cursive; font-size: 38px; color: var(--brand-dark); line-height: 1; margin-bottom: 5px;}
+        .stat-label { font-size: 11px; color: var(--text-secondary); text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px;}
 
-        /* LAYOUT GRÁFICO Y TABLA */
-        .dashboard-content {
-            display: grid; grid-template-columns: 1fr; gap: 20px; margin-bottom: 30px;
-        }
-        @media (min-width: 768px) {
-            .dashboard-content { grid-template-columns: 2fr 1.5fr; }
-        }
+        .dashboard-content { display: grid; grid-template-columns: 1fr; gap: 20px; margin-bottom: 30px; }
+        .charts-row { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        @media (min-width: 768px) { .charts-row { grid-template-columns: 1.5fr 1fr; } }
 
         .panel-box {
-            background: var(--card-white); border-radius: 20px; padding: 20px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.03); border: 1px solid rgba(224, 215, 208, 0.5);
+            background: var(--card-white); border-radius: 24px; padding: 20px;
+            box-shadow: 0 4px 20px rgba(53,37,26,0.04); border: 1px solid rgba(230, 222, 213, 0.5);
         }
         .panel-header {
             display: flex; justify-content: space-between; align-items: center;
             margin-bottom: 15px; border-bottom: 1px solid var(--border-warm); padding-bottom: 10px;
         }
-        .panel-title { font-weight: 700; font-size: 16px; color: var(--brand-marine); }
+        .panel-title { font-weight: 700; font-size: 16px; color: var(--brand-dark); }
 
-        .grafico-wrapper {
-            max-width: 100%; height: auto; margin-bottom: 10px;
-            aspect-ratio: 2/1; position: relative;
-        }
-        #graficoEstadisticas { position: absolute; top: 0; left: 0; width: 100% !important; height: 100% !important; }
+        .grafico-wrapper { max-width: 100%; height: auto; position: relative; }
+        .grafico-barras { aspect-ratio: 2/1; }
+        .grafico-dona { aspect-ratio: 1/1; max-height: 250px; margin: 0 auto;}
 
-        /* TABLA LIMITADA */
-        .table-container { overflow-x: auto; margin-bottom: 15px;}
+        .table-container { overflow-x: auto; margin-bottom: 5px;}
         table { width: 100%; border-collapse: collapse; text-align: left; table-layout: fixed;}
-        th, td { padding: 12px 8px; border-bottom: 1px solid var(--border-warm); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
-        th { color: var(--text-secondary); font-size: 10px; text-transform: uppercase; }
-        td { font-size: 13px; }
+        th, td { padding: 14px 8px; border-bottom: 1px solid var(--border-warm); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+        th { color: var(--text-secondary); font-size: 11px; text-transform: uppercase; letter-spacing: 1px;}
+        td { font-size: 14px; color: var(--text-main); font-weight: 600;}
         tr:last-child td { border-bottom: none; }
         
-        .badge { background: #27AE60; color: #fff; padding: 4px 8px; border-radius: 8px; font-size: 11px; font-weight: 700; }
-        .btn-outlined { background-color: transparent; border: 1.5px solid var(--border-warm); color: var(--text-secondary); padding: 10px 15px; font-size: 13px; border-radius: 10px; font-weight: 600; cursor: pointer;}
+        .badge { background: #D4AF37; color: #fff; padding: 5px 10px; border-radius: 12px; font-size: 12px; font-weight: 700; box-shadow: 0 2px 5px rgba(212, 175, 55, 0.3);}
         
-        #btnExcelCompleto { background: #27AE60; margin-bottom: 15px; width: 100%; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 18px 25px; border-radius: 18px;}
-        #btnExcelCompleto:active { background-color: #219150; }
-        .spinner { width: 15px; height: 15px; border: 2px solid #fff; border-top: 2px solid transparent; border-radius: 50%; animation: spin 0.8s linear infinite; display: none; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        #mensajeLoader { text-align: center; margin-top: 50px; font-weight: 600; color: var(--brand-dark); animation: titilar 1.5s infinite; }
+        @keyframes titilar { 0% {opacity:0.5;} 50% {opacity:1;} 100% {opacity:0.5;} }
 
-        #mensajeLoader { text-align: center; margin-top: 50px; font-weight: 600; color: var(--brand-marine); }
-
-        /* DISEÑO CARRUSEL DE MESES */
         .month-slider {
-            display: flex; gap: 8px; overflow-x: auto; padding-bottom: 5px; margin-top: 10px;
-            scrollbar-width: none; /* Oculta la barra en Firefox */
+            display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; margin-top: 12px;
+            scrollbar-width: none; 
         }
-        .month-slider::-webkit-scrollbar { display: none; } /* Oculta la barra en Chrome/Safari */
+        .month-slider::-webkit-scrollbar { display: none; } 
         
         .month-pill {
-            background: var(--card-white); border: 1.5px solid var(--border-warm); color: var(--text-secondary);
-            padding: 8px 16px; border-radius: 20px; font-family: 'Poppins', sans-serif; font-size: 13px; 
+            background: var(--card-white); border: 2px solid var(--border-warm); color: var(--text-secondary);
+            padding: 10px 20px; border-radius: 24px; font-family: 'Varela Round', sans-serif; font-size: 14px; 
             font-weight: 600; cursor: pointer; white-space: nowrap; transition: 0.2s;
         }
-        .month-pill.active {
-            background: var(--brand-marine); border-color: var(--brand-marine); color: white;
-        }
-
+        .month-pill.active { background: var(--brand-dark); border-color: var(--brand-dark); color: var(--brand-light); box-shadow: 0 4px 10px rgba(53,37,26,0.2);}
     </style>
 </head>
 <body>
 
     <div id="pantallaLogin">
-        <h2 style="color: var(--brand-marine); margin-bottom: 10px; font-weight: 700;">Acceso Dueño</h2>
+        <h2 style="font-family: 'Lilita One', cursive; color: var(--brand-dark); font-size: 38px; margin-bottom: 10px;">BRUNA ADMIN</h2>
         <input type="password" id="inputPin" class="pin-input" placeholder="****" maxlength="4" inputmode="numeric">
-        <button id="btnDesbloquear" class="btn" style="width: 200px;">Desbloquear</button>
-        <p id="errorPin" style="color: #E74C3C; display: none; margin-top: 15px; font-size: 13px;">PIN incorrecto</p>
+        <button id="btnDesbloquear" class="btn" style="width: 220px;">Acceder al Panel</button>
+        <p id="errorPin" style="color: #E74C3C; display: none; margin-top: 15px; font-size: 14px; font-weight: bold;">PIN incorrecto</p>
     </div>
 
     <div class="main-container">
         <div id="pantallaDashboard">
             
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; padding: 0 5px;">
-                <div>
-                    <h1>Panel Dueño 📊</h1>
-                    <p style="margin: 0; color: var(--text-secondary); font-size: 13px;">Métricas Históricas</p>
-                </div>
-                <button id="btnExcelCompleto" class="btn btn-excel">
-                    ⬇️ Excel Completo
-                    <div class="spinner"></div>
-                </button>
+            <div style="margin-bottom: 10px; padding: 0 5px;">
+                <h1>Panel Dueño 📊</h1>
+                <p style="margin: 0; color: var(--text-secondary); font-size: 14px;">Métricas Operativas en Tiempo Real</p>
             </div>
            
-<div style="margin-top: 20px; margin-bottom: 25px;">
-                <label style="font-size: 14px; font-weight: 700; color: var(--brand-marine); margin: 0;">📅 Filtrar (Año 2026):</label>
+            <div style="margin-top: 25px; margin-bottom: 25px;">
+                <label style="font-size: 15px; font-weight: 700; color: var(--brand-dark); margin: 0;">📅 Rendimiento por Mes de Registro:</label>
+                <p style="font-size: 12px; color: var(--text-secondary); margin: 5px 0 0 0; line-height: 1.3;">Filtra a los clientes según el mes en que crearon su tarjeta para ver sus consumos totales.</p>
                 <div class="month-slider" id="contenedorMeses">
                     <button class="month-pill active" onclick="seleccionarMes('todos', this)">Histórico Completo</button>
                     <button class="month-pill" onclick="seleccionarMes('2026-01', this)">Enero</button>
@@ -169,42 +141,54 @@
                 </div>
             </div>
 
-                             
-
-            <div id="mensajeLoader">Sincronizando base de datos...</div>
+            <div id="mensajeLoader">Conectando en vivo...</div>
 
             <div id="contenidoDatos" style="display: none;">
                 
                 <div class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-value" id="uiTotalClientes">0</div>
-                        <div class="stat-label">Nuevos Clientes</div>
+                        <div class="stat-label">Clientes Registrados</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-value" id="uiTotalSellosHist">0</div>
-                        <div class="stat-label">Sellos Históricos Totales</div>
+                        <div class="stat-label">Tazas Servidas (Total)</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-value" style="color: #27AE60;" id="uiCafesCanjeados">0</div>
-                        <div class="stat-label">Cafés Canjeados</div>
+                        <div class="stat-value" style="color: #D4AF37;" id="uiCafesCanjeados">0</div>
+                        <div class="stat-label">Premios Entregados 🎁</div>
                     </div>
                 </div>
 
                 <div class="dashboard-content">
-                    
-                    <div class="panel-box">
-                        <div class="panel-header">
-                            <span class="panel-title">Distribución del Negocio</span>
+                    <div class="charts-row">
+                        <div class="panel-box">
+                            <div class="panel-header">
+                                <span class="panel-title">Volumen Operativo</span>
+                            </div>
+                            <div class="grafico-wrapper grafico-barras">
+                                <canvas id="graficoEstadisticas"></canvas>
+                            </div>
                         </div>
-                        <div class="grafico-wrapper">
-                            <canvas id="graficoEstadisticas"></canvas>
+
+                        <div class="panel-box">
+                            <div class="panel-header">
+                                <span class="panel-title">Termómetro de Retención</span>
+                                <span style="font-size: 11px; color: var(--text-secondary);">Estado de tarjetas</span>
+                            </div>
+                            <div class="grafico-wrapper grafico-dona">
+                                <canvas id="graficoProgreso"></canvas>
+                            </div>
+                            <p style="font-size: 11px; color: var(--text-secondary); text-align: center; margin-top: 15px; line-height: 1.4;">
+                                Indica cuántos clientes están cerca de reclamar un premio para anticipar stock.
+                            </p>
                         </div>
                     </div>
 
                     <div class="panel-box">
                         <div class="panel-header">
-                            <span class="panel-title">Últimos Clientes</span>
-                            <span style="font-size: 11px; color: var(--text-secondary);">Top 15</span>
+                            <span class="panel-title">Últimos Movimientos</span>
+                            <span style="font-size: 11px; color: var(--text-secondary);">Top 15 recientes</span>
                         </div>
                         <div class="table-container">
                             <table>
@@ -217,7 +201,7 @@
                                     </tr>
                                 </thead>
                                 <tbody id="tablaClientes">
-                                    </tbody>
+                                </tbody>
                             </table>
                         </div>
                     </div>
@@ -229,7 +213,8 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        // CAMBIO CLAVE: Importamos onSnapshot para escuchar en tiempo real
+        import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCaqJraAXeZ8F4zCd9GUIdNIHhfU7FMzJk",
@@ -245,15 +230,16 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const pinAdmin = "7777"; 
-        let grafico = null;
-
-        // GUARDAMOS TODOS LOS DATOS EN MEMORIA LOCAL PARA NO COLAPSAR FIREBASE AL FILTRAR
+        
+        let graficoBarras = null;
+        let graficoDona = null;
         let todosLosClientes = [];
+        let filtroActual = 'todos'; // Guardamos qué mes se está mirando
 
         if (sessionStorage.getItem('adminAutorizado') === 'true') {
             document.getElementById('pantallaLogin').style.display = 'none';
             document.getElementById('pantallaDashboard').style.display = 'block';
-            cargarBaseDatos();
+            iniciarEscuchaBaseDatos();
         }
 
         document.getElementById('btnDesbloquear').addEventListener('click', verificarPin);
@@ -264,17 +250,16 @@
                 sessionStorage.setItem('adminAutorizado', 'true');
                 document.getElementById('pantallaLogin').style.display = 'none';
                 document.getElementById('pantallaDashboard').style.display = 'block';
-                cargarBaseDatos();
+                iniciarEscuchaBaseDatos();
             } else {
                 document.getElementById('errorPin').style.display = 'block';
                 document.getElementById('inputPin').value = '';
             }
         }
 
-        // --- CARGAMOS LA BASE UNA SOLA VEZ DE FORMA SEGURA ---
-        async function cargarBaseDatos() {
-            try {
-                const querySnapshot = await getDocs(collection(db, "clientes"));
+        // CAMBIO CLAVE: Función que escucha cambios en vivo
+        function iniciarEscuchaBaseDatos() {
+            onSnapshot(collection(db, "clientes"), (querySnapshot) => {
                 todosLosClientes = [];
 
                 querySnapshot.forEach((doc) => {
@@ -288,57 +273,55 @@
                     });
                 });
 
-                // Invertimos el array para ver a los últimos registrados arriba de todo
                 todosLosClientes.reverse();
 
                 document.getElementById('mensajeLoader').style.display = 'none';
                 document.getElementById('contenidoDatos').style.display = 'block';
 
-                aplicarFiltro('todos'); // Mostramos todo al principio
-
-            } catch (error) {
-                console.error("Error cargando base:", error);
-                document.getElementById('mensajeLoader').innerText = "Hubo un error al sincronizar.";
-            }
+                // Re-aplicamos el filtro actual para que la pantalla se dibuje con los datos frescos
+                aplicarFiltro(filtroActual); 
+            }, (error) => {
+                console.error("Error escuchando base:", error);
+                document.getElementById('mensajeLoader').innerText = "Hubo un error de conexión en vivo.";
+            });
         }
-     
 
-        // --- LÓGICA DE FILTRADO Y MATEMÁTICAS ---
-        
-        // Nueva función para el carrusel de burbujas
         window.seleccionarMes = function(mesFiltro, btn) {
-            // Le sacamos el color activo a todos los botones
             document.querySelectorAll('.month-pill').forEach(b => b.classList.remove('active'));
-            // Se lo ponemos solo al que tocaste
             btn.classList.add('active');
-            
-            aplicarFiltro(mesFiltro);
+            filtroActual = mesFiltro; // Guardamos la selección
+            aplicarFiltro(filtroActual);
         }
 
         window.aplicarFiltro = function(mesFiltro) {
             let clientesFiltrados = todosLosClientes;
 
-            // Filtramos exacto por Año-Mes ("2026-03")
             if (mesFiltro && mesFiltro !== 'todos') {
                 clientesFiltrados = todosLosClientes.filter(c => c.fecha && c.fecha.startsWith(mesFiltro));
             }
 
-            // Calculamos métricas históricas
             let totalClientes = clientesFiltrados.length;
             let totalCafesCanjeados = 0;
             let totalSellosHistoricos = 0;
+            
+            let grupoInicio = 0; 
+            let grupoMedio = 0;  
+            let grupoCerca = 0;  
 
             clientesFiltrados.forEach(c => {
                 totalCafesCanjeados += c.premios;
                 totalSellosHistoricos += c.puntos + (c.premios * 10);
+                
+                if(c.puntos <= 3) grupoInicio++;
+                else if(c.puntos <= 7) grupoMedio++;
+                else if(c.puntos <= 9) grupoCerca++;
             });
 
-            // Actualizamos Tarjetas
+            // Animación sutil de actualización de números
             document.getElementById('uiTotalClientes').innerText = totalClientes;
             document.getElementById('uiTotalSellosHist').innerText = totalSellosHistoricos;
             document.getElementById('uiCafesCanjeados').innerText = totalCafesCanjeados;
 
-            // Dibujamos la Tabla (Solo los primeros 15)
             const tbody = document.getElementById('tablaClientes');
             tbody.innerHTML = '';
             
@@ -346,69 +329,60 @@
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td style="font-family: monospace; color: var(--text-secondary);">${c.telefono}</td>
-                    <td style="font-weight: 600;">${c.nombre}</td>
-                    <td style="font-weight: bold; color: var(--brand-marine);">${c.puntos} /10</td>
+                    <td>${c.nombre}</td>
+                    <td style="color: var(--brand-dark);">${c.puntos} /10</td>
                     <td>${c.premios > 0 ? '<span class="badge">' + c.premios + ' 🎁</span>' : '-'}</td>
                 `;
                 tbody.appendChild(tr);
             });
 
-            actualizarGrafico(totalClientes, totalSellosHistoricos, totalCafesCanjeados);
+            actualizarGraficos(totalClientes, totalSellosHistoricos, totalCafesCanjeados, grupoInicio, grupoMedio, grupoCerca);
         }
 
-        function actualizarGrafico(clientes, sellos, canjeados) {
-            const ctx = document.getElementById('graficoEstadisticas').getContext('2d');
-            if(grafico) grafico.destroy(); // Borramos el anterior si existe
+        function actualizarGraficos(clientes, sellos, canjeados, gInicio, gMedio, gCerca) {
+            Chart.defaults.font.family = "'Varela Round', sans-serif";
+            
+            const ctxBarras = document.getElementById('graficoEstadisticas').getContext('2d');
+            if(graficoBarras) graficoBarras.destroy(); 
 
-            grafico = new Chart(ctx, {
+            graficoBarras = new Chart(ctxBarras, {
                 type: 'bar',
                 data: {
-                    labels: ['Métricas Generales'],
+                    labels: ['Métricas Operativas'],
                     datasets: [
-                        { label: 'Clientes Registrados', data: [clientes], backgroundColor: '#1A4D7C', borderRadius: 4 },
-                        { label: 'Sellos Entregados', data: [sellos], backgroundColor: '#3498DB', borderRadius: 4 },
-                        { label: 'Cafés Canjeados 🎁', data: [canjeados], backgroundColor: '#27AE60', borderRadius: 4 }
+                        { label: 'Registros', data: [clientes], backgroundColor: '#35251A', borderRadius: 6 },
+                        { label: 'Tazas Servidas', data: [sellos], backgroundColor: '#8C7A6B', borderRadius: 6 },
+                        { label: 'Premios 🎁', data: [canjeados], backgroundColor: '#D4AF37', borderRadius: 6 }
                     ]
                 },
                 options: {
-                    responsive: true, maintainAspectRatio: true, aspectRatio: 2,
+                    responsive: true, maintainAspectRatio: false,
                     scales: { y: { beginAtZero: true }, x: { display: false } },
-                    plugins: { legend: { position: 'bottom', labels: { font: { size: 10, family: 'Poppins' } } } }
+                    plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, padding: 15 } } },
+                    animation: { duration: 500 } // Animación más rápida para las actualizaciones en vivo
+                }
+            });
+
+            const ctxDona = document.getElementById('graficoProgreso').getContext('2d');
+            if(graficoDona) graficoDona.destroy();
+
+            graficoDona = new Chart(ctxDona, {
+                type: 'doughnut',
+                data: {
+                    labels: ['0 a 3 tazas', '4 a 7 tazas', 'Próximos a canjear (8-9)'],
+                    datasets: [{
+                        data: [gInicio, gMedio, gCerca],
+                        backgroundColor: ['#E6DED5', '#8C7A6B', '#D4AF37'],
+                        borderWidth: 2, borderColor: '#FDFAF0'
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false, cutout: '70%',
+                    plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, padding: 15 } } },
+                    animation: { duration: 500 }
                 }
             });
         }
-
-        // --- BOTÓN EXCEL COMPLETO ---
-        document.getElementById('btnExcelCompleto').addEventListener('click', async function() {
-            if(todosLosClientes.length === 0) return alert("No hay datos históricos.");
-            
-            const btn = document.getElementById('btnExcelCompleto');
-            const spinner = btn.querySelector('.spinner');
-            btn.disabled = true; spinner.style.display = 'block';
-            btn.innerHTML = `⬇️ Generando Excel... <div class="spinner" style="display:block;"></div>`;
-
-            try {
-                let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
-                csvContent += "Telefono,Nombre,Tazas Actuales,Cafes Ya Canjeados,Fecha Alta\r\n";
-
-                todosLosClientes.forEach(c => {
-                    let fechaCorta = c.fecha ? c.fecha.split('T')[0] : 'Desconocida';
-                    csvContent += `"${c.telefono}","${c.nombre}",${c.puntos},${c.premios},${fechaCorta}\r\n`;
-                });
-
-                const encodedUri = encodeURI(csvContent);
-                const link = document.createElement("a");
-                link.setAttribute("href", encodedUri);
-                link.setAttribute("download", "Total_Clientes_CAFECLUB.csv");
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = `⬇️ Excel Completo <div class="spinner"></div>`;
-            }
-        });
     </script>
 </body>
 </html>
-
