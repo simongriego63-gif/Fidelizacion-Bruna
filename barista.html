@@ -13,188 +13,116 @@
     <script src="https://unpkg.com/html5-qrcode"></script>
     <style>
         :root {
-            /* Paleta BRUNA */
-            --bg-warm: #F8F4E6; /* Beige claro de fondo */
-            --card-white: #FDFAF0; /* Crema para tarjetas */
-            
-            --brand-dark: #35251A; /* Marrón corporativo */
+            var(--bg-warm): #F8F4E6; 
+            --card-white: #FDFAF0; 
+            --brand-dark: #35251A; 
             --brand-gradient: linear-gradient(135deg, #3A2A1E 0%, #1A110A 100%);
-            --brand-light: #F2E3A4; /* Amarillo crema */
-            
+            --brand-light: #F2E3A4; 
             --text-main: #35251A;
             --text-secondary: #8C7A6B;
-            
             --border-warm: #E6DED5;
-            --glass-bg: rgba(253, 250, 240, 0.95); /* Modal fondo crema casi sólido */
+            --glass-bg: rgba(253, 250, 240, 0.95); 
         }
 
         body {
-            background-color: var(--bg-warm);
+            background-color: #F8F4E6;
             color: var(--text-main);
-            font-family: 'Varela Round', sans-serif; /* Tipografía más redondita y amigable */
+            font-family: 'Varela Round', sans-serif; 
             text-align: center; margin: 0; padding: 0;
             display: flex; flex-direction: column; align-items: center;
             min-height: 100vh;
         }
 
-        .main-container {
-            width: 100%; max-width: 400px; padding: 20px; box-sizing: border-box;
-            display: flex; flex-direction: column; align-items: center;
-        }
+        .main-container { width: 100%; max-width: 400px; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; }
 
-        .card-header h1 { 
-            font-family: 'Lilita One', cursive; 
-            font-size: 26px; 
-            color: var(--brand-dark); 
-            margin: 0; 
-            letter-spacing: 1px;
-        }
+        .card-header h1 { font-family: 'Lilita One', cursive; font-size: 26px; color: var(--brand-dark); margin: 0; letter-spacing: 1px; }
 
-        .modern-card {
-            background-color: var(--card-white);
-            border-radius: 28px;
-            box-shadow: 0 10px 30px rgba(53, 37, 26, 0.08);
-            padding: 30px 25px; width: 100%; box-sizing: border-box;
-            margin-bottom: 20px;
-            border: 1px solid rgba(230, 222, 213, 0.5);
-        }
+        .modern-card { background-color: var(--card-white); border-radius: 28px; box-shadow: 0 10px 30px rgba(53, 37, 26, 0.08); padding: 30px 25px; width: 100%; box-sizing: border-box; margin-bottom: 20px; border: 1px solid rgba(230, 222, 213, 0.5); }
 
-        /* --- LOGIN (PIN) --- */
-        #pantallaLogin {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: var(--bg-warm); z-index: 2000;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            padding: 40px; box-sizing: border-box;
-        }
-        
-        .pin-input {
-            padding: 20px; border-radius: 16px; border: 2px solid var(--border-warm); font-size: 32px;
-            text-align: center; width: 100%; max-width: 200px; margin-bottom: 30px; letter-spacing: 10px;
-            font-weight: bold; color: var(--brand-dark); font-family: monospace;
-            background-color: var(--card-white);
-            transition: all 0.3s;
-        }
+        /* --- LOGIN --- */
+        #pantallaLogin { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #F8F4E6; z-index: 2000; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px; box-sizing: border-box; }
+        .pin-input { padding: 20px; border-radius: 16px; border: 2px solid var(--border-warm); font-size: 32px; text-align: center; width: 100%; max-width: 200px; margin-bottom: 30px; letter-spacing: 10px; font-weight: bold; color: var(--brand-dark); font-family: monospace; background-color: var(--card-white); transition: all 0.3s; }
         .pin-input:focus { border-color: var(--brand-dark); outline: none; box-shadow: 0 0 10px rgba(53, 37, 26, 0.15); }
-        
-        /* Animación de error para el PIN */
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
-        }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } }
         .error-shake { animation: shake 0.4s; border-color: #E74C3C !important; color: #E74C3C;}
 
         /* --- BÚSQUEDA --- */
-        #reader {
-            width: 80%; max-width: 240px; 
-            margin: 0 auto 20px auto; 
-            border-radius: 20px; overflow: hidden; border: none;
-            background-color: #000;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
-            border: 4px solid var(--brand-dark); 
-        }
-
-        /* Estilo para el botón de permiso de cámara que inyecta html5-qrcode */
-        #reader button {
-            background-color: var(--brand-dark);
-            color: var(--brand-light);
-            border: none;
-            padding: 12px 20px;
-            border-radius: 14px;
-            font-family: 'Varela Round', sans-serif;
-            font-weight: 600;
-            cursor: pointer;
-            margin: 20px;
-        }
-
+        #reader { width: 80%; max-width: 240px; margin: 0 auto 20px auto; border-radius: 20px; overflow: hidden; border: none; background-color: #000; box-shadow: inset 0 0 20px rgba(0,0,0,0.3); border: 4px solid var(--brand-dark); }
+        #reader button { background-color: var(--brand-dark); color: var(--brand-light); border: none; padding: 12px 20px; border-radius: 14px; font-family: 'Varela Round', sans-serif; font-weight: 600; cursor: pointer; margin: 20px; }
+        
         .separador { margin: 30px 0 20px 0; color: var(--text-secondary); font-size: 11px; text-transform: uppercase; letter-spacing: 2px; font-weight: 600;}
-        
         .input-manual-group { display: flex; flex-direction: column; gap: 12px; width: 100%;}
-        .input-manual-group input {
-            width: 100%; padding: 18px; border-radius: 14px; border: 1.5px solid var(--border-warm);
-            font-size: 16px; background-color: var(--card-white); color: var(--text-main); transition: all 0.2s;
-            box-sizing: border-box; text-align: center; font-weight: 600; font-family: monospace;
-        }
+        .input-manual-group input { width: 100%; padding: 18px; border-radius: 14px; border: 1.5px solid var(--border-warm); font-size: 16px; background-color: var(--card-white); color: var(--text-main); transition: all 0.2s; box-sizing: border-box; text-align: center; font-weight: 600; font-family: monospace; }
         .input-manual-group input:focus { border-color: var(--brand-dark); background-color: #fff;}
-        
-        .btn-buscar-manual {
-            width: 100%; background-color: #E6DED5; color: var(--brand-dark); border: none; padding: 16px; border-radius: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s; font-size: 15px; font-family: 'Varela Round', sans-serif;
-        }
+        .btn-buscar-manual { width: 100%; background-color: #E6DED5; color: var(--brand-dark); border: none; padding: 16px; border-radius: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s; font-size: 15px; font-family: 'Varela Round', sans-serif; }
         .btn-buscar-manual:active { background-color: #D5CCC3; }
 
         /* --- ACCIONES (MODAL CENTRAL) --- */
-        #pantallaAcciones {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(53, 37, 26, 0.6); 
-            z-index: 1000; display: none; align-items: center; justify-content: center;
-            padding: 20px; box-sizing: border-box; backdrop-filter: blur(5px);
-        }
-        
-        .acciones-content {
-            width: 100%; max-width: 360px; 
-            background: var(--glass-bg);
-            border-radius: 28px; padding: 30px; box-sizing: border-box;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.25); 
-            color: var(--text-main); text-align: center; 
-            border: 1px solid var(--brand-light);
-            animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
+        #pantallaAcciones { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(53, 37, 26, 0.6); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; backdrop-filter: blur(5px); }
+        .acciones-content { width: 100%; max-width: 360px; background: var(--glass-bg); border-radius: 28px; padding: 30px; box-sizing: border-box; box-shadow: 0 20px 60px rgba(0,0,0,0.25); color: var(--text-main); text-align: center; border: 1px solid var(--brand-light); animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         @keyframes modalPop { from {opacity: 0; transform: scale(0.8);} to {opacity: 1; transform: scale(1);} }
 
         .cliente-info-header { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-bottom: 25px; }
         .cliente-avatar { width: 60px; height: 60px; background-color: var(--brand-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700; color: var(--brand-dark); border: 2px solid var(--brand-dark); }
-        .cliente-textos { flex: none; text-align: center; }
         .cliente-nombre { font-size: 20px; font-weight: 700; color: var(--text-main); }
         .cliente-tel { color: var(--text-secondary); font-size: 13px; font-family: monospace; margin-top: 2px; display: block;}
         
-        .estado-sellos-container {
-            background-color: #FFFDF7; border-radius: 20px; padding: 20px; margin-bottom: 25px;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            border: 2px dashed var(--border-warm);
-        }
+        .estado-sellos-container { background-color: #FFFDF7; border-radius: 20px; padding: 20px; margin-bottom: 25px; display: flex; flex-direction: column; justify-content: center; align-items: center; border: 2px dashed var(--border-warm); }
         .estado-sellos-texto { font-size: 13px; color: var(--text-secondary); margin-bottom: 5px; font-weight: 600;}
         .estado-sellos-numero { color: var(--brand-dark); font-weight: 700; font-size: 42px; line-height: 1; font-family: 'Lilita One', cursive;}
         .estado-sellos-numero span { font-size: 18px; opacity: 0.5; font-family: 'Varela Round', sans-serif;}
 
-        /* --- BOTONES MODERNOS CORREGIDOS --- */
+        /* --- BOTONES MODERNOS --- */
         .btn-stack { display: flex; flex-direction: column; gap: 12px; width: 100%;}
-        .btn {
-            width: 100%; padding: 18px; 
-            border-radius: 24px; /* Bordes más redondeados */
-            border: none; font-size: 16px; font-weight: 600; cursor: pointer;
-            transition: all 0.2s ease; font-family: 'Varela Round', sans-serif;
-        }
-        
-        /* Botón Marrón Principal - Sin efecto aplastar */
-        .btn-brand { 
-            background: var(--brand-gradient); 
-            color: var(--brand-light); 
-            box-shadow: 0 4px 15px rgba(53, 37, 26, 0.2); /* Sombra difuminada suave */
-        }
-        .btn-brand:active { 
-            transform: scale(0.98); /* Ligero efecto de escala en lugar de movimiento vertical */
-            box-shadow: 0 2px 8px rgba(53, 37, 26, 0.2); 
-        } 
-        
-        /* Oro para canjear - Sin efecto aplastar */
-        .btn-gold { 
-            background-color: #D4AF37; 
-            color: #fff; 
-            display: none; 
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
-        }
-        .btn-gold:active { 
-            transform: scale(0.98); 
-            box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
-        }
-        
+        .btn { width: 100%; padding: 18px; border-radius: 24px; border: none; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; font-family: 'Varela Round', sans-serif; }
+        .btn-brand { background: var(--brand-gradient); color: var(--brand-light); box-shadow: 0 4px 15px rgba(53, 37, 26, 0.2); }
+        .btn-brand:active { transform: scale(0.98); box-shadow: 0 2px 8px rgba(53, 37, 26, 0.2); } 
+        .btn-gold { background-color: #D4AF37; color: #fff; display: none; box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3); }
+        .btn-gold:active { transform: scale(0.98); box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3); }
         .btn-outlined { background-color: transparent; border: 1.5px solid var(--border-warm); color: var(--text-secondary); padding: 14px; font-size: 14px;}
         .btn-outlined:active { background-color: rgba(53,37,26,0.05); }
         
         #mensajeLoader { margin-top: 20px; color: var(--brand-dark); display: none; font-weight: 600; font-size: 14px; animation: titilar 1s infinite;}
+
+        /* =========================================
+           NUEVOS MODALES PERSONALIZADOS (ALERTS)
+           ========================================= */
+        .custom-modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px);
+            z-index: 3000; display: none; align-items: center; justify-content: center;
+            padding: 20px; box-sizing: border-box;
+        }
+        .custom-modal-box {
+            background: var(--card-white); border-radius: 24px; padding: 30px 20px;
+            width: 100%; max-width: 320px; text-align: center;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            animation: modalPop 0.2s ease-out;
+        }
+        .custom-modal-text { color: var(--brand-dark); font-size: 16px; margin-bottom: 25px; font-weight: 600; }
+        .modal-btn-row { display: flex; gap: 10px; }
+        .btn-modal-ok { flex: 1; background: var(--brand-dark); color: var(--brand-light); border: none; padding: 14px; border-radius: 16px; font-weight: 600; font-family: 'Varela Round'; cursor: pointer; }
+        .btn-modal-cancel { flex: 1; background: transparent; color: var(--text-secondary); border: 1.5px solid var(--border-warm); padding: 14px; border-radius: 16px; font-weight: 600; font-family: 'Varela Round'; cursor: pointer; }
     </style>
 </head>
 <body>
+
+    <div id="modalAlertaCustom" class="custom-modal-overlay">
+        <div class="custom-modal-box">
+            <div id="textoAlertaCustom" class="custom-modal-text">Mensaje de error</div>
+            <button id="btnCerrarAlerta" class="btn-modal-ok">Aceptar</button>
+        </div>
+    </div>
+
+    <div id="modalConfirmCustom" class="custom-modal-overlay">
+        <div class="custom-modal-box">
+            <div id="textoConfirmCustom" class="custom-modal-text">¿Confirmas la entrega?</div>
+            <div class="modal-btn-row">
+                <button id="btnCancelarConfirm" class="btn-modal-cancel">Cancelar</button>
+                <button id="btnAceptarConfirm" class="btn-modal-ok">Confirmar</button>
+            </div>
+        </div>
+    </div>
 
     <div id="pantallaLogin">
         <h2 style="font-family: 'Lilita One', cursive; color: var(--brand-dark); font-size: 32px;">BRUNA CAJA</h2>
@@ -206,7 +134,7 @@
     <div class="main-container">
         <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 15px; padding: 0 5px;">
             <h1>BRUNA</h1>
-            <div style="font-size: 10px; color: var(--text-secondary); font-family: monospace; font-weight: bold;">SCANNER v1.3</div>
+            <div style="font-size: 10px; color: var(--text-secondary); font-family: monospace; font-weight: bold;">SCANNER v1.4</div>
         </div>
 
         <div id="mensajeLoader">Buscando tarjeta...</div>
@@ -229,7 +157,7 @@
         </div>
     </div>
 
-    <div id="pantallaAcciones" onclick="event.target === this && miCaja.volverABuscar()">
+    <div id="pantallaAcciones">
         <div class="acciones-content">
             <div class="cliente-info-header">
                 <div class="cliente-avatar" id="uiAvatar">A</div>
@@ -287,7 +215,12 @@
                     acciones: document.getElementById('pantallaAcciones'),
                     loader: document.getElementById('mensajeLoader'),
                     pinInput: document.getElementById('inputPin'),
-                    errorCamara: document.getElementById('errorCamara')
+                    errorCamara: document.getElementById('errorCamara'),
+                    // Elementos de Modales Personalizados
+                    modalAlerta: document.getElementById('modalAlertaCustom'),
+                    textoAlerta: document.getElementById('textoAlertaCustom'),
+                    modalConfirm: document.getElementById('modalConfirmCustom'),
+                    textoConfirm: document.getElementById('textoConfirmCustom')
                 };
 
                 this.audioBeep = new Audio('data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU'); 
@@ -296,13 +229,38 @@
                 this.verificarSeguridad();
             }
 
+            // --- SISTEMA DE MODALES PERSONALIZADOS ---
+            mostrarAlerta(mensaje) {
+                this.ui.textoAlerta.innerText = mensaje;
+                this.ui.modalAlerta.style.display = 'flex';
+            }
+
+            mostrarConfirmacion(mensaje, callbackAceptar) {
+                this.ui.textoConfirm.innerText = mensaje;
+                this.ui.modalConfirm.style.display = 'flex';
+                
+                document.getElementById('btnAceptarConfirm').onclick = () => {
+                    this.ui.modalConfirm.style.display = 'none';
+                    callbackAceptar();
+                };
+                
+                document.getElementById('btnCancelarConfirm').onclick = () => {
+                    this.ui.modalConfirm.style.display = 'none';
+                };
+            }
+
             iniciarEventos() {
+                // Evento cerrar alerta
+                document.getElementById('btnCerrarAlerta').addEventListener('click', () => {
+                    this.ui.modalAlerta.style.display = 'none';
+                });
+
                 document.getElementById('btnDesbloquear').addEventListener('click', () => this.verificarPin());
                 this.ui.pinInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') this.verificarPin(); });
                 
                 document.getElementById('btnBuscarManual').addEventListener('click', () => {
                     let tel = document.getElementById('inputTelBusqueda').value.replace(/\D/g,'');
-                    if(tel.length < 8) return alert("Número inválido.");
+                    if(tel.length < 8) return this.mostrarAlerta("Número inválido. Ingrese al menos 8 dígitos.");
                     this.pausarCamara();
                     this.buscarClienteEnFirebase(tel);
                 });
@@ -313,12 +271,8 @@
                 document.getElementById('btnVolver').addEventListener('click', () => this.volverABuscar());
             }
 
-            reproducirBeep() {
-                try { this.audioBeep.play().catch(e=>{}); } catch(e){} 
-            }
-            vibrar(patron) {
-                if ("vibrate" in navigator) { navigator.vibrate(patron); }
-            }
+            reproducirBeep() { try { this.audioBeep.play().catch(e=>{}); } catch(e){} }
+            vibrar(patron) { if ("vibrate" in navigator) { navigator.vibrate(patron); } }
 
             verificarSeguridad() {
                 if (localStorage.getItem('baristaAutorizado') === 'true') {
@@ -347,7 +301,6 @@
                 this.ui.errorCamara.style.display = 'none';
                 if (!this.html5QrCode) { this.html5QrCode = new Html5Qrcode("reader"); }
                 
-                // Configuración para pedir permiso en el idioma local (manejado por el navegador/librería)
                 this.html5QrCode.start(
                     { facingMode: "environment" }, 
                     { fps: 10, qrbox: { width: 180, height: 180 } },
@@ -355,7 +308,7 @@
                     () => { }
                 ).catch((err) => {
                     console.error("Fallo cámara: ", err);
-                    this.ui.errorCamara.style.display = 'block'; // Mostramos el mensaje de error personalizado
+                    this.ui.errorCamara.style.display = 'block'; 
                 });
             }
 
@@ -395,11 +348,11 @@
                         this.ui.loader.style.display = 'none';
                         this.ui.acciones.style.display = 'flex'; 
                     } else {
-                        alert("Cliente no encontrado.");
+                        this.mostrarAlerta("Cliente no encontrado en la base de datos.");
                         this.volverABuscar();
                     }
                 } catch (error) {
-                    alert("Error de conexión");
+                    this.mostrarAlerta("Error de conexión con el servidor.");
                     this.volverABuscar();
                 }
             }
@@ -434,16 +387,17 @@
                     this.actualizarBotonesAccion();
 
                 } catch(e) {
-                    alert("Error al guardar.");
+                    this.mostrarAlerta("Ocurrió un error al guardar el sello.");
                 } finally {
                     btn.disabled = false;
                     btn.innerText = btnOriginal;
                 }
             }
 
-            async canjearPremio() {
-                if(confirm("¿Confirmas entrega de bebida gratis?")) {
-                  try {
+            canjearPremio() {
+                // Usamos nuestra nueva función de confirmación en lugar de confirm() nativo
+                this.mostrarConfirmacion("¿Confirmas la entrega de la bebida gratis?", async () => {
+                    try {
                         const docRef = doc(this.db, "clientes", this.clienteActualId);
                         const fechaAutomatica = new Date().toISOString(); 
                         
@@ -454,12 +408,12 @@
                         }); 
                         
                         this.vibrar([100, 50, 100, 50, 200]); 
-                        alert("¡Premio registrado correctamente!");
+                        this.mostrarAlerta("¡Premio registrado correctamente!");
                         this.volverABuscar(); 
                     } catch(e) {
-                        alert("Error al reiniciar.");
+                        this.mostrarAlerta("Error al reiniciar la tarjeta.");
                     }
-                }
+                });
             }
 
             volverABuscar() {
@@ -472,7 +426,6 @@
             }
         }
 
-        // Iniciar App
         window.onload = () => {
             window.miCaja = new BaristaApp(); 
         };
