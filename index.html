@@ -3,34 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Club Café</title>
+    <title>BRUNA - Tarjeta de Fidelización</title>
     
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#1A4D7C">
+    <meta name="theme-color" content="#35251A">
     <link rel="apple-touch-icon" href="icon.png">
     <script>
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js');
         }
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Paleta Cálida y Azul Marino Pacífico (Misma inspo Barista) */
-            --bg-warm: #FAF5F0; /* Crema suave de fondo */
+            /* Paleta BRUNA (Marrón intenso y Crema/Amarillo claro) */
+            --bg-warm: #F8F4E6; /* Fondo beige muy sutil */
             --card-white: #ffffff;
-            --brand-marine: #1A4D7C; /* Azul marino pacífico */
-            --brand-marine-gradient: linear-gradient(135deg, #1A4D7C 0%, #0D3153 100%);
-            --text-main: #2C3E50;
-            --text-on-blue: #ffffff;
-            --text-secondary: #7F8C8D;
-            --border-warm: #E0D7D0;
+            
+            --brand-dark: #35251A; /* Marrón oscuro del logo */
+            --brand-gradient: linear-gradient(135deg, #3A2A1E 0%, #1A110A 100%);
+            --brand-light: #F2E3A4; /* Amarillo pastel/crema del círculo de Instagram */
+            
+            --text-main: #35251A;
+            --text-on-dark: #F2E3A4;
+            --text-secondary: #8C7A6B;
+            --border-warm: #E6DED5;
             
             /* Colores para las tazas */
-            --cup-empty-border: rgba(255,255,255,0.2); /* Borde sutil taza vacía */
-            --cup-filled-coffee: #3E2723; /* Color café oscuro */
-            --cup-filled-steam: #D5D8DC; /* Humo plateado */
-            --cup-marked-bg: #ffffff; /* Fondo taza marcada */
+            --cup-empty-border: rgba(242, 227, 164, 0.25); /* Borde sutil taza vacía en crema */
+            --cup-filled-coffee: #35251A; /* Color café oscuro */
+            --cup-filled-steam: #FFFFFF; /* Humo blanco */
+            --cup-marked-bg: #F2E3A4; /* Fondo taza marcada (Amarillo crema) */
         }
 
         body {
@@ -41,14 +44,20 @@
             min-height: 100vh; color: var(--text-main);
         }
 
-        /* --- PANTALLA 1: REGISTRO CÁLIDO --- */
+        /* --- PANTALLA 1: REGISTRO --- */
         #pantallaRegistro {
             text-align: center; width: 100%; max-width: 360px; display: none;
             background-color: var(--card-white); padding: 40px 30px;
-            border-radius: 28px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
-            border: 1px solid rgba(224, 215, 208, 0.5);
+            border-radius: 28px; box-shadow: 0 10px 30px rgba(53, 37, 26, 0.08);
+            border: 1px solid rgba(230, 222, 213, 0.5);
         }
-        #pantallaRegistro h2 { color: var(--brand-marine); margin-top: 0; font-weight: 700;}
+        #pantallaRegistro h2 { 
+            font-family: 'Lilita One', cursive; 
+            color: var(--brand-dark); 
+            margin-top: 0; 
+            font-size: 32px;
+            letter-spacing: 1px;
+        }
         #pantallaRegistro p { color: var(--text-secondary); font-size: 14px; margin-bottom: 30px;}
         
         .input-group { margin-bottom: 15px; text-align: left;}
@@ -59,51 +68,69 @@
             font-size: 16px; box-sizing: border-box; font-family: 'Poppins', sans-serif;
             background-color: #fcfcfc; transition: border-color 0.2s;
         }
-        .input-box:focus { border-color: var(--brand-marine); outline: none; background-color: #fff;}
+        .input-box:focus { border-color: var(--brand-dark); outline: none; background-color: #fff;}
         
         .btn-crear {
-            background: var(--brand-marine-gradient); color: white; border: none;
+            background: var(--brand-gradient); color: var(--brand-light); border: none;
             padding: 18px; width: 100%; border-radius: 18px; font-size: 16px;
             font-weight: 600; cursor: pointer; margin-top: 20px; font-family: 'Poppins', sans-serif;
-            box-shadow: 0 4px 15px rgba(13,49,83,0.2); transition: transform 0.1s;
+            box-shadow: 0 8px 20px rgba(53, 37, 26, 0.25); transition: transform 0.1s;
         }
         .btn-crear:active { transform: scale(0.97); }
 
-        /* --- PANTALLA 2: LA TARJETA DIGITAL AZUL --- */
-        /* --- EFECTO TARJETA 3D AESTHETIC --- */
+        /* --- PANTALLA 2: LA TARJETA DIGITAL BRUNA --- */
         .flip-container {
             perspective: 1000px; width: 100%; max-width: 360px; margin: 0 auto; cursor: pointer;
-            -webkit-tap-highlight-color: transparent; /* Quita el brillo azul en celulares */
+            -webkit-tap-highlight-color: transparent;
         }
-        /* Cuando tiene la clase flipped, gira 180 grados */
         .flip-container.flipped .flipper { transform: rotateY(180deg); }
         
         .flipper {
-            display: grid; /* Grid hace que el frente y el dorso midan exactamente lo mismo */
-            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Giro con rebote suave */
+            display: grid; 
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
             transform-style: preserve-3d; width: 100%;
         }
         
         .front, .back {
-            grid-area: 1 / 1; /* Se apilan una sobre otra */
+            grid-area: 1 / 1; 
             backface-visibility: hidden; -webkit-backface-visibility: hidden;
             border-radius: 28px; width: 100%; height: 100%;
         }
         
         .front { transform: rotateY(0deg); }
         
-        /* DISEÑO DEL DORSO (LOGO AESTHETIC TIPO UNCLE DOUGH) */
+        /* DISEÑO DEL DORSO (RÉPLICA INSTAGRAM BRUNA) */
         .back {
             transform: rotateY(180deg);
-            background: var(--brand-marine-gradient);
-            box-shadow: 0 15px 40px rgba(13,49,83,0.3);
+            background: var(--brand-gradient);
+            box-shadow: 0 15px 40px rgba(53, 37, 26, 0.4);
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            color: var(--card-white); text-align: center; 
-            /* Borde interior sutil para darle textura de tarjeta real */
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid rgba(242, 227, 164, 0.1);
         }
-        .back-logo-text { font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 38px; line-height: 1; margin: 0; letter-spacing: 2px;}
-        .back-subtitle { font-family: monospace; font-size: 14px; opacity: 0.7; letter-spacing: 5px; margin-top: 5px;}
+        
+        /* Círculo crema con texto marrón */
+        .bruna-circle {
+            background-color: var(--brand-light);
+            width: 190px;
+            height: 190px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+
+        .back-logo-text { 
+            font-family: 'Lilita One', cursive; 
+            color: var(--brand-dark); 
+            font-size: 48px; 
+            line-height: 1; 
+            margin: 0; 
+            letter-spacing: 1px;
+        }
+        
+        .back-subtitle { color: var(--brand-light); font-family: monospace; font-size: 14px; opacity: 0.6; letter-spacing: 4px; margin-top: 15px;}
 
         @keyframes titilar { 0% {opacity:0.4;} 50% {opacity:1;} 100% {opacity:0.4;} }
         .texto-girar { text-align: center; font-size: 12px; color: var(--text-secondary); margin-bottom: 15px; font-weight: 600; animation: titilar 2s infinite; }
@@ -111,43 +138,42 @@
         #pantallaTarjeta { width: 100%; max-width: 360px; display: none; }
         
         .wallet-card {
-            background: var(--brand-marine-gradient);
+            background: var(--brand-gradient);
             border-radius: 28px; overflow: hidden;
-            box-shadow: 0 15px 40px rgba(13,49,83,0.3);
-            display: flex; flex-direction: column; color: var(--text-on-blue);
+            box-shadow: 0 15px 40px rgba(53, 37, 26, 0.4);
+            display: flex; flex-direction: column; color: var(--text-on-dark);
             padding: 25px; box-sizing: border-box;
+            border: 1px solid rgba(242, 227, 164, 0.1);
         }
         
         .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        .logo { font-size: 18px; font-weight: 700; letter-spacing: -0.5px; }
+        .logo { font-family: 'Lilita One', cursive; font-size: 26px; letter-spacing: 1px; color: var(--brand-light); line-height: 1;}
         .user-info { text-align: right; }
-        .user-nickname { font-size: 15px; font-weight: 600; }
+        .user-nickname { font-size: 15px; font-weight: 600; color: #fff;}
         .user-tel-label { display: block; font-size: 10px; opacity: 0.7; text-transform: uppercase; font-family: monospace;}
 
-        /* Contenedor Tazas con efecto Glassmorphism */
+        /* Contenedor Tazas */
         .stamps-container {
-            background: rgba(255, 255, 255, 0.08); /* Fondo vidrio sutil */
-            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); /* Desenfoque */
-            padding: 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            padding: 20px; border-radius: 20px; border: 1px solid rgba(242, 227, 164, 0.15);
             margin-bottom: 20px;
         }
         
-        /* Grilla de Tazas */
         .stamps-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 15px; justify-items: center;}
         
-        /* DISEÑO DE LA TAZA (SVG) */
         .stamp-cup { width: 45px; height: 45px; transition: all 0.3s ease; }
         
-        /* Estilo Taza VACÍA (Borde sutil) */
+        /* Taza VACÍA */
         .stamp-cup .cup-path { fill: none; stroke: var(--cup-empty-border); stroke-width: 1.5; transition: all 0.3s; }
-        .stamp-cup .steam-path { fill: none; stroke: none; transition: all 0.3s; } /* Sin humo */
-        .stamp-cup .coffee-fill { fill: none; transition: all 0.3s; } /* Sin café */
+        .stamp-cup .steam-path { fill: none; stroke: none; transition: all 0.3s; }
+        .stamp-cup .coffee-fill { fill: none; transition: all 0.3s; }
 
-        /* Estilo Taza LLENA/MARCADA */
-        .stamp-cup.filled { transform: scale(1.05); }
-        .stamp-cup.filled .cup-path { fill: var(--cup-marked-bg); stroke: var(--cup-marked-bg); } /* Taza blanca fondo */
-        .stamp-cup.filled .coffee-fill { fill: var(--cup-filled-coffee); } /* Café marrón */
-        .stamp-cup.filled .steam-path { fill: none; stroke: var(--cup-filled-steam); stroke-width: 1.5; stroke-linecap: round; } /* Humo plateado */
+        /* Taza LLENA */
+        .stamp-cup.filled { transform: scale(1.08); }
+        .stamp-cup.filled .cup-path { fill: var(--cup-marked-bg); stroke: var(--cup-marked-bg); }
+        .stamp-cup.filled .coffee-fill { fill: var(--cup-filled-coffee); }
+        .stamp-cup.filled .steam-path { fill: none; stroke: var(--cup-filled-steam); stroke-width: 1.5; stroke-linecap: round; }
 
         .stamps-text { text-align: center; font-size: 11px; opacity: 0.8; margin: 0; font-weight: 400;}
 
@@ -155,12 +181,12 @@
         .info-group { text-align: left; }
         .info-group.right { text-align: right; }
         .info-label { font-size: 10px; opacity: 0.7; text-transform: uppercase; margin-bottom: 2px; font-weight: 600;}
-        .info-value { font-weight: 700; font-size: 16px; }
-        .info-value-points { color: #FFD700; /* Oro para puntos */ font-size: 20px;}
+        .info-value { font-weight: 700; font-size: 16px; color: #fff;}
+        .info-value-points { color: var(--brand-light); font-size: 20px;} /* Puntos en amarillo crema */
 
         .qr-section { display: flex; flex-direction: column; align-items: center; gap: 10px;}
-        .qr-box { background-color: var(--card-white); padding: 12px; border-radius: 16px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .qr-box img { display: block; width: 110px; height: 110px; }
+        .qr-box { background-color: var(--brand-light); padding: 12px; border-radius: 16px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .qr-box img { display: block; width: 110px; height: 110px; mix-blend-mode: multiply; } /* Para que el QR se integre al crema */
         .user-id { font-size: 11px; opacity: 0.7; letter-spacing: 1px; font-family: monospace; }
         
         .btn-cerrar { margin-top: 30px; background: none; color: var(--text-secondary); border: none; width: 100%; text-decoration: underline; font-family: 'Poppins', sans-serif; font-size: 13px; cursor: pointer;}
@@ -170,15 +196,15 @@
 </head>
 <body>
 
-    <div id="cargando">Abriendo tu Club...</div>
+    <div id="cargando">Abriendo Bruna...</div>
 
     <div id="pantallaRegistro">
-        <h2>¡Bienvenido!☕</h2>
+        <h2>BRUNA</h2>
         <p>Completa tus datos para obtener tu tarjeta digital.</p>
         
         <div class="input-group">
             <label>Tu Apodo / Nombre</label>
-            <input type="text" id="inputNombre" class="input-box" placeholder="Ej: Simon " required>
+            <input type="text" id="inputNombre" class="input-box" placeholder="Ej: Simon" required>
         </div>
         
         <div class="input-group">
@@ -188,7 +214,8 @@
         
         <button class="btn-crear" onclick="ingresarTarjeta()">Crear / Cargar Tarjeta</button>
     </div>
-     <div id="pantallaTarjeta">
+
+    <div id="pantallaTarjeta">
         <p class="texto-girar">👉 Toca la tarjeta para girarla</p>
         
         <div class="flip-container" onclick="this.classList.toggle('flipped')">
@@ -197,7 +224,7 @@
                 <div class="front">
                     <div class="wallet-card" style="margin: 0; height: 100%;">
                         <div class="card-header">
-                            <div class="logo">CLUB CAFÉ</div>
+                            <div class="logo">BRUNA</div>
                             <div class="user-info">
                                 <div class="user-nickname" id="displayNombre">...</div>
                                 <span class="user-tel-label" id="displayTelLabel">******0000</span>
@@ -211,7 +238,7 @@
                         
                         <div class="info-row">
                             <div class="info-group">
-                                <div class="info-label">Estado Premio🎁</div>
+                                <div class="info-label">Estado Premio 🎁</div>
                                 <div class="info-value" id="displayPremio">...</div>
                             </div>
                             <div class="info-group right">
@@ -230,16 +257,9 @@
                 </div>
 
                 <div class="back">
-                    <svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" style="margin-bottom: 25px; opacity: 0.9;">
-                        <path fill="none" stroke="#ffffff" stroke-width="2.5" d="M30,35 H80 V75 Q80,90 65,90 H35 Q20,90 20,75 Z" />
-                        <path fill="none" stroke="#ffffff" stroke-width="2.5" d="M35,15 Q40,5 45,15 T55,15 M55,20 Q60,10 65,20 T75,20" stroke-linecap="round"/>
-                        <circle fill="#ffffff" cx="40" cy="50" r="4"/>
-                        <circle fill="#ffffff" cx="60" cy="50" r="4"/>
-                        <path fill="none" stroke="#ffffff" stroke-width="2" d="M40,65 Q50,70 60,65" stroke-linecap="round"/>
-                        <path fill="none" stroke="#ffffff" stroke-width="2.5" d="M40,90 V98 M60,90 V98" stroke-linecap="round"/>
-                    </svg>
-                    
-                    <h2 class="back-logo-text">CLUB CAFÉ</h2>
+                    <div class="bruna-circle">
+                        <h2 class="back-logo-text">BRUNA</h2>
+                    </div>
                     <div class="back-subtitle">BAKERY</div>
                 </div>
 
@@ -253,7 +273,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getFirestore, doc, setDoc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-        // TUS LLAVES CONFIGURADAS
         const firebaseConfig = {
             apiKey: "AIzaSyCaqJraAXeZ8F4zCd9GUIdNIHhfU7FMzJk",
             authDomain: "club-cafe-app.firebaseapp.com",
@@ -287,26 +306,25 @@
 
             if(!nombre || !celular) return alert("Por favor completa ambos datos");
 
-            celular = celular.replace(/\D/g,''); // Solo números
+            celular = celular.replace(/\D/g,''); 
             if(celular.length < 8) return alert("Ingresa un número de celular válido");
 
             uiRegistro.style.display = 'none';
             uiCargando.style.display = 'block';
             uiCargando.innerText = "Sincronizando tarjeta...";
-try {
+
+            try {
                 const docRef = doc(db, "clientes", celular);
                 const docSnap = await getDoc(docRef);
 
                 if (docSnap.exists()) {
                     await setDoc(docRef, { nombre: nombre }, { merge: true });
                 } else {
-                    // EL SISTEMA TOMA LA FECHA SOLITO ACÁ:
                     const fechaAutomatica = new Date().toISOString();
-                    
                     await setDoc(docRef, { 
                         nombre: nombre, 
                         puntos: 0,
-                        fechaRegistro: fechaAutomatica // Se guarda de fondo
+                        fechaRegistro: fechaAutomatica
                     });
                 }
                 
@@ -319,19 +337,18 @@ try {
                 uiRegistro.style.display = 'block';
             }
         }
+
         function abrirTarjeta(celular) {
             uiCargando.style.display = 'none';
             uiRegistro.style.display = 'none';
             uiTarjeta.style.display = 'block';
 
-            // QR visual con el número de teléfono
-            document.getElementById('qrImage').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${celular}`;
+            // QR con color de fondo adaptado para que lea bien sobre amarillo (generado con margen blanco integrado)
+            document.getElementById('qrImage').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${celular}&bgcolor=F2E3A4&color=35251A`;
             
-            // Ofuscar teléfono ******1234
             let ultimos4 = celular.slice(-4);
             document.getElementById('displayTelLabel').innerText = `******${ultimos4}`;
 
-            // ESCUCHAR EN TIEMPO REAL
             onSnapshot(doc(db, "clientes", celular), (docSnap) => {
                 if (docSnap.exists()) {
                     const datos = docSnap.data();
@@ -343,7 +360,6 @@ try {
             });
         }
 
-                // --- FUNCIÓN MÁGICA: DIBUJAR LAS TAZAS (CORREGIDA) ---
         function renderizarTazas(puntosActuales) {
             const totalTazas = 10;
             const grid = document.getElementById('gridSellos');
@@ -353,7 +369,6 @@ try {
                 const contenedorSvg = document.createElement('div');
                 contenedorSvg.innerHTML = obtenerSvgTaza();
                 
-                // EL ARREGLO: Buscamos específicamente la etiqueta 'svg', ignorando espacios rotos
                 const svgElement = contenedorSvg.querySelector('svg'); 
                 
                 if (i <= puntosActuales) {
@@ -363,32 +378,26 @@ try {
                 grid.appendChild(svgElement);
             }
 
-            // Actualizar textos informativos
             document.getElementById('displayPuntos').innerText = puntosActuales;
             
             const uiPremio = document.getElementById('displayPremio');
             if(puntosActuales >= totalTazas) {
-                uiPremio.innerText = "🎁 ¡BEBIDA LISTA!";
-                uiPremio.style.color = "#FFD700"; // Oro
+                uiPremio.innerText = "¡BEBIDA LISTA!";
+                uiPremio.style.color = "var(--brand-light)";
                 uiPremio.style.fontWeight = "700";
             } else {
                 uiPremio.innerText = "Aún sin premios";
-                uiPremio.style.color = "var(--text-on-blue)";
+                uiPremio.style.color = "#ffffff";
                 uiPremio.style.fontWeight = "400";
             }
         }
 
-
-        // Esta función devuelve el código SVG puro de una taza de café minimalista
         function obtenerSvgTaza() {
             return `
             <svg class="stamp-cup" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                 <path class="steam-path" d="M35,15 Q40,5 45,15 T55,15 M55,20 Q60,10 65,20 T75,20" />
-                
                 <path class="cup-path" d="M20,35 H80 V75 Q80,90 65,90 H35 Q20,90 20,75 Z" />
-                
                 <path class="coffee-fill" d="M22,37 H78 V73 Q78,88 63,88 H37 Q22,88 22,73 Z" />
-                
                 <path class="cup-path" d="M80,45 Q95,45 95,60 T80,75" />
             </svg>
             `;
