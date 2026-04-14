@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title> CAJA - CAFE CLUB</title>
+
+    <link rel="manifest" href="manifest-barista.json">
+    <meta name="theme-color" content="#1A4D7C">
+    <link rel="apple-touch-icon" href="icon.png">
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+    </script> 
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <style>
+        :root {
+            /* Paleta Cálida y Azul Marino Pacífico */
+            --bg-warm: #FAF5F0; /* Crema suave y cálido de fondo */
+            --card-white: #ffffff;
+            
+            --brand-marine: #1A4D7C; /* Azul marino pacífico y serio */
+            --brand-marine-gradient: linear-gradient(135deg, #1A4D7C 0%, #0D3153 100%);
+            
+            --text-main: #2C3E50; /* Gris azulado oscuro para textos */
+            --text-secondary: #7F8C8D; /* Gris suave para textos secundarios */
+            
+            --border-warm: #E0D7D0; /* Borde sutil en tono cálido */
+            --glass-bg: rgba(255, 255, 255, 0.85); /* Vidrio para el modal central */
+        }
+
+        body {
+            background-color: var(--bg-warm);
+            color: var(--text-main);
+            font-family: 'Poppins', sans-serif; /* Cambio de tipografía */
+            text-align: center; margin: 0; padding: 0;
+            display: flex; flex-direction: column; align-items: center;
+            min-height: 100vh;
+        }
+
+        .main-container {
+            width: 100%; max-width: 400px; padding: 20px; box-sizing: border-box;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        h1 { font-weight: 700; font-size: 24px; margin: 10px 0 20px 0; color: var(--brand-marine); }
+
+        .modern-card {
+            background-color: var(--card-white);
+            border-radius: 28px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04); /* Sombra aún más suave */
+            padding: 30px 25px; width: 100%; box-sizing: border-box;
+            margin-bottom: 20px;
+            border: 1px solid rgba(224, 215, 208, 0.5); /* Borde cálido muy sutil */
+        }
+
+        /* --- LOGIN (PIN) --- */
+        #pantallaLogin {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: var(--bg-warm); z-index: 2000;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            padding: 40px; box-sizing: border-box;
+        }
+        
+        .pin-input {
+            padding: 20px; border-radius: 16px; border: 2px solid var(--border-warm); font-size: 32px;
+            text-align: center; width: 100%; max-width: 200px; margin-bottom: 30px; letter-spacing: 10px;
+            font-weight: bold; color: var(--brand-marine); font-family: monospace;
+            background-color: var(--card-white);
+            transition: all 0.3s;
+        }
+        .pin-input:focus { border-color: var(--brand-marine); outline: none; box-shadow: 0 0 10px rgba(26,77,124,0.1); }
+        /* --- BÚSQUEDA --- */
+        #reader {
+            width: 80%; max-width: 240px; /* Lo achicamos limitando el ancho máximo */
+            margin: 0 auto 20px auto; /* Esto asegura que quede bien centrado */
+            border-radius: 20px; overflow: hidden; border: none;
+            background-color: #000;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
+        }
+
+        
+      .separador { margin: 30px 0 20px 0; color: var(--text-secondary); font-size: 11px; text-transform: uppercase; letter-spacing: 2px; font-weight: 600;}
+        
+        /* Layout cambiado: Input arriba, Botón abajo */
+        .input-manual-group { display: flex; flex-direction: column; gap: 12px; width: 100%;}
+        .input-manual-group input {
+            width: 100%; padding: 18px; border-radius: 14px; border: 1.5px solid var(--border-warm);
+            font-size: 16px; background-color: var(--card-white); color: var(--text-main); transition: all 0.2s;
+            box-sizing: border-box;
+        }
+        .input-manual-group input:focus { border-color: var(--brand-marine); background-color: #fff;}
+        
+        /* Botón buscar ahora abajo y gris cálido */
+        .btn-buscar-manual {
+            width: 100%; background-color: #E6E0DA; color: var(--brand-marine); border: none; padding: 16px; border-radius: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s; font-size: 15px;
+        }
+        .btn-buscar-manual:active { background-color: #DCD6CF; }
+
+        /* --- ACCIONES (MODAL CENTRAL) --- */
+        #pantallaAcciones {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(13, 49, 83, 0.4); /* Fondo azul marino translúcido pacífico */
+            z-index: 1000;
+            display: none; 
+            align-items: center; /* CENTRADO VERTICAL */
+            justify-content: center; /* CENTRADO HORIZONTAL */
+            padding: 20px; box-sizing: border-box;
+        }
+        
+        .acciones-content {
+            width: 100%; max-width: 360px; /* Ancho de tarjeta central */
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-radius: 28px; /* Redondeado completo */
+            padding: 30px; box-sizing: border-box;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.15); /* Sombra de modal central */
+            color: var(--text-main); text-align: center; /* Texto centrado en el modal */
+            border: 1px solid rgba(255,255,255,0.4);
+            
+            /* Animación de aparición central (fade + scale) */
+            animation: modalPop 0.3s ease-out;
+        }
+        @keyframes modalPop { from {opacity: 0; transform: scale(0.9);} to {opacity: 1; transform: scale(1);} }
+
+        /* Reorganización info cliente para centrado */
+        .cliente-info-header { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-bottom: 25px; }
+        .cliente-avatar { width: 60px; height: 60px; background-color: var(--border-warm); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700; color: var(--brand-marine); border: 2px solid #fff; }
+        .cliente-textos { flex: none; text-align: center; }
+        .cliente-nombre { font-size: 20px; font-weight: 700; color: var(--text-main); }
+        .cliente-tel { color: var(--text-secondary); font-size: 13px; font-family: monospace; margin-top: 2px; display: block;}
+        
+        .estado-sellos-container {
+            background-color: rgba(26, 77, 124, 0.03); border-radius: 20px; padding: 20px; margin-bottom: 25px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            border: 1px solid rgba(26, 77, 124, 0.08);
+        }
+        .estado-sellos-texto { font-size: 13px; color: var(--text-secondary); margin-bottom: 5px;}
+        .estado-sellos-numero { color: var(--brand-marine); font-weight: 700; font-size: 42px; line-height: 1;}
+        .estado-sellos-numero span { font-size: 18px; opacity: 0.5; font-weight: 400;}
+
+        /* --- BOTONES MODERNOS --- */
+        .btn-stack { display: flex; flex-direction: column; gap: 12px; width: 100%;}
+        .btn {
+            width: 100%; padding: 18px; border-radius: 18px;
+            border: none; font-size: 16px; font-weight: 600; cursor: pointer;
+            transition: all 0.2s ease; font-family: 'Poppins', sans-serif;
+        }
+        
+        /* Botón principal Azul Marino Pacífico */
+        .btn-marine { background: var(--brand-marine-gradient); color: white; box-shadow: 0 4px 15px rgba(13,49,83,0.2); }
+        .btn-marine:active { transform: scale(0.97); box-shadow: 0 2px 5px rgba(13,49,83,0.1); }
+        
+        /* Oro para canjear */
+        .btn-gold { background-color: #E6C200; color: #fff; display: none; }
+        
+        /* Oops y Cerrar */
+        .btn-outlined { background-color: transparent; border: 1.5px solid var(--border-warm); color: var(--text-secondary); padding: 14px; font-size: 14px;}
+        .btn-outlined:active { background-color: rgba(0,0,0,0.02); }
+        
+        #mensajeLoader { margin-top: 20px; color: var(--brand-marine); display: none; font-weight: 600; font-size: 14px;}
+    </style>
+</head>
+<body>
+
+    <div id="pantallaLogin">
+        <h2>Panel de Caja</h2>
+        <p style="color: var(--text-secondary); margin-bottom: 30px; font-size: 14px;">Ingresa el PIN para continuar</p>
+        <input type="password" id="inputPin" class="pin-input" placeholder="****" maxlength="4" inputmode="numeric">
+        <button id="btnDesbloquear" class="btn btn-marine" style="max-width: 200px;">Desbloquear</button>
+        <p id="errorPin" style="color: #ff5252; display: none; margin-top: 15px; font-size: 13px;">PIN incorrecto</p>
+    </div>
+
+    <div class="main-container">
+        <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 15px; padding: 0 5px;">
+            <h1 style="margin: 0; font-size: 22px;">Club Café☕</h1>
+            <div style="font-size: 10px; color: var(--text-secondary); font-family: monospace; opacity: 0.7;">CAJA v1.1</div>
+        </div>
+
+        <div id="mensajeLoader">Procesando...</div>
+
+        <div id="pantallaBusqueda" class="modern-card">
+            <p style="color: var(--text-secondary); font-size: 13px; margin-top: 0; margin-bottom: 20px;">Apunta al QR con la cámara trasera</p>
+            <div id="reader"></div>
+            
+            <div class="separador">o busca manualmente</div>
+            
+            <div class="input-manual-group">
+                <input type="tel" id="inputTelBusqueda" placeholder="Ej: 2215551234">
+                <button id="btnBuscarManual" class="btn-buscar-manual">Buscar Cliente</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="pantallaAcciones" onclick="event.target === this && volverABuscar()">
+        <div class="acciones-content">
+            <div class="cliente-info-header">
+                <div class="cliente-avatar" id="uiAvatar">A</div>
+                <div class="cliente-textos">
+                    <div class="cliente-nombre" id="uiNombre">Nombre...</div>
+                    <span class="cliente-tel" id="uiTel">Teléfono...</span>
+                </div>
+            </div>
+
+            <div class="estado-sellos-container">
+                <div class="estado-sellos-texto">Tarjeta actual:</div>
+                <div class="estado-sellos-numero"><span id="uiSellos">0</span> /10 <span>sellos</span></div>
+            </div>
+
+            <div class="btn-stack">
+                <button id="btnSumar" class="btn btn-marine">+ Sumar 1 Sello</button>
+                <button id="btnCanjear" class="btn btn-gold">🎁 Entregar Premio y Reiniciar</button>
+                
+                <div style="display: flex; gap: 10px; width: 100%; margin-top: 5px;">
+                    <button id="btnRestar" class="btn btn-outlined" style="flex: 1;">Oops (-1)</button>
+                    <button id="btnVolver" class="btn btn-outlined" style="flex: 1; border-color: #FADBD8; color: #E74C3C;">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getFirestore, doc, getDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCaqJraAXeZ8F4zCd9GUIdNIHhfU7FMzJk",
+            authDomain: "club-cafe-app.firebaseapp.com",
+            databaseURL: "https://club-cafe-app-default-rtdb.firebaseio.com",
+            projectId: "club-cafe-app",
+            storageBucket: "club-cafe-app.firebasestorage.app",
+            messagingSenderId: "1007849307452",
+            appId: "1:1007849307452:web:2472f6b2cab7deeae53239",
+            measurementId: "G-6314S7TS0T"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        let html5QrCode;
+        let clienteActualId = null;
+        let puntosActuales = 0;
+
+        const uiLogin = document.getElementById('pantallaLogin');
+        const uiBusqueda = document.getElementById('pantallaBusqueda');
+        const uiAcciones = document.getElementById('pantallaAcciones');
+        const uiLoader = document.getElementById('mensajeLoader');
+        const pinCorrecto = "2026";
+
+        // --- SEGURIDAD (PIN) ---
+        if (localStorage.getItem('baristaAutorizado') === 'true') {
+            uiLogin.style.display = 'none';
+            iniciarCamara();
+        }
+
+        document.getElementById('btnDesbloquear').addEventListener('click', verificarPin);
+        document.getElementById('inputPin').addEventListener('keypress', (e) => { if(e.key === 'Enter') verificarPin(); });
+
+        function verificarPin() {
+            const pinIngresado = document.getElementById('inputPin').value;
+            if (pinIngresado === pinCorrecto) {
+                localStorage.setItem('baristaAutorizado', 'true');
+                uiLogin.style.display = 'none';
+                iniciarCamara();
+            } else {
+                document.getElementById('errorPin').style.display = 'block';
+                document.getElementById('inputPin').value = '';
+            }
+        }
+
+   // --- CÁMARA TRASERA (environment) ---
+        function iniciarCamara() {
+            if (!html5QrCode) { html5QrCode = new Html5Qrcode("reader"); }
+            html5QrCode.start(
+                { facingMode: "environment" }, 
+                { fps: 10, qrbox: { width: 180, height: 180 } },
+                onScanSuccess,
+                () => { }
+            ).catch((err) => {
+                console.error("Fallo cámara: ", err);
+                document.getElementById('reader').innerHTML = '<p style="color:#E74C3C; padding:30px; font-size:12px;">No se pudo activar la cámara.</p>';
+            });
+        }
+        function pausarCamara() {
+            if (html5QrCode && html5QrCode.isScanning) {
+                html5QrCode.stop().catch(err => console.log(err));
+            }
+        }
+
+        function onScanSuccess(decodedText) {
+            pausarCamara();
+            buscarClienteEnFirebase(decodedText);
+        }
+
+        // --- BÚSQUEDA MANUAL ---
+        document.getElementById('btnBuscarManual').addEventListener('click', () => {
+            let tel = document.getElementById('inputTelBusqueda').value.replace(/\D/g,'');
+            if(tel.length < 8) return alert("Número inválido.");
+            pausarCamara();
+            buscarClienteEnFirebase(tel);
+        });
+
+        // --- FIREBASE ---
+        async function buscarClienteEnFirebase(telefono) {
+            uiBusqueda.style.display = 'none';
+            uiLoader.style.display = 'block';
+
+            try {
+                const docRef = doc(db, "clientes", telefono);
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    const datos = docSnap.data();
+                    clienteActualId = telefono;
+                    puntosActuales = datos.puntos;
+                    
+                    document.getElementById('uiNombre').innerText = datos.nombre;
+                    document.getElementById('uiTel').innerText = telefono;
+                    document.getElementById('uiSellos').innerText = puntosActuales;
+                    document.getElementById('uiAvatar').innerText = datos.nombre.charAt(0).toUpperCase();
+
+                    if(puntosActuales >= 10) {
+                        document.getElementById('btnSumar').style.display = 'none';
+                        document.getElementById('btnCanjear').style.display = 'block';
+                    } else {
+                        document.getElementById('btnSumar').style.display = 'block';
+                        document.getElementById('btnCanjear').style.display = 'none';
+                    }
+
+                    uiLoader.style.display = 'none';
+                    uiAcciones.style.display = 'flex'; // Modal central centrado
+                } else {
+                    alert("Cliente no registrado: " + telefono);
+                    volverABuscar();
+                }
+            } catch (error) {
+                alert("Error de conexión");
+                volverABuscar();
+            }
+        }
+
+        // --- ACCIONES ---
+        document.getElementById('btnSumar').addEventListener('click', () => modificarSellos(1));
+        document.getElementById('btnRestar').addEventListener('click', () => modificarSellos(-1));
+
+        async function modificarSellos(cantidad) {
+            if(cantidad === -1 && puntosActuales <= 0) return;
+            if(cantidad === 1 && puntosActuales >= 10) return;
+
+            const btn = document.getElementById('btnSumar');
+            const btnOriginal = btn.innerText;
+            btn.innerText = "Guardando...";
+            btn.disabled = true;
+
+            try {
+                const docRef = doc(db, "clientes", clienteActualId);
+                await updateDoc(docRef, { puntos: increment(cantidad) });
+                
+                puntosActuales += cantidad;
+                document.getElementById('uiSellos').innerText = puntosActuales;
+                
+                if(puntosActuales >= 10) {
+                    document.getElementById('btnSumar').style.display = 'none';
+                    document.getElementById('btnCanjear').style.display = 'block';
+                } else {
+                    document.getElementById('btnSumar').style.display = 'block';
+                    document.getElementById('btnSumar').innerText = "+ Sumar 1 Sello";
+                }
+
+            } catch(e) {
+                alert("Error al guardar.");
+                btn.innerText = btnOriginal;
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        document.getElementById('btnCanjear').addEventListener('click', async () => {
+            if(confirm("¿Confirmas entrega de premio? Volverá a 0 sellos.")) {
+              try {
+                    const docRef = doc(db, "clientes", clienteActualId);
+                    
+                    // EL SISTEMA TOMA LA FECHA DEL CANJE ACÁ:
+                    const fechaAutomatica = new Date().toISOString();
+                    
+                    await updateDoc(docRef, { 
+                        puntos: 0,
+                        ultimoPremio: fechaAutomatica, // Anota cuándo fue
+                        totalPremiosCanjeados: increment(1) // Suma +1 al historial del local
+                    }); 
+                    
+                alert("¡Premio entregado! Tarjeta reiniciada.");
+                    volverABuscar(); 
+                } catch(e) {
+                    alert("Error al reiniciar.");
+                }
+            }
+        });
+        document.getElementById('btnVolver').addEventListener('click', volverABuscar);
+
+        function volverABuscar() {
+            uiAcciones.style.display = 'none';
+            uiLoader.style.display = 'none';
+            uiBusqueda.style.display = 'block';
+            document.getElementById('inputTelBusqueda').value = "";
+            clienteActualId = null;
+            iniciarCamara();
+        }
+    </script>
+</body>
+</html>
