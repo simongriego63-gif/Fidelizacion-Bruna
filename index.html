@@ -233,6 +233,11 @@
         </div>
         <button id="btnCerrarSesion" class="btn-cerrar">Cerrar sesión en este dispositivo</button>
     </div>
+    <button id="btnInstalarApp" class="btn-cerrar" style="display: none; margin-top: 15px; margin-bottom: 10px;">
+    ⬇️ Instalar BRUNA en el inicio
+    </button>
+
+<button onclick="cerrarSesion()" class="btn-cerrar">Cerrar sesión en este dispositivo</button>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
@@ -398,5 +403,34 @@
             new BrunaApp();
         };
     </script>
+    <script>
+    let eventoInstalacion = null;
+    const btnInstalar = document.getElementById('btnInstalarApp');
+
+    // 1. Atrapamos el evento de instalación silenciosamente
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault(); // Evitamos el cartel automático invasivo
+        eventoInstalacion = e;
+        btnInstalar.style.display = 'block'; // Mostramos nuestro texto discreto
+    });
+
+    // 2. Qué pasa cuando tocan el texto discreto
+    btnInstalar.addEventListener('click', async () => {
+        if (!eventoInstalacion) return;
+        
+        eventoInstalacion.prompt(); // Mostramos el instalador oficial
+        
+        const { outcome } = await eventoInstalacion.userChoice;
+        if (outcome === 'accepted') {
+            btnInstalar.style.display = 'none'; // Lo ocultamos si aceptó
+        }
+        eventoInstalacion = null;
+    });
+
+    // 3. Si ya está instalada, nos aseguramos de que no se muestre
+    window.addEventListener('appinstalled', () => {
+        btnInstalar.style.display = 'none';
+    });
+</script>
 </body>
 </html>
