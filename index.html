@@ -163,9 +163,31 @@
         
         .btn-cerrar { margin-top: 30px; background: none; color: var(--text-secondary); border: none; width: 100%; text-decoration: underline; font-family: 'Poppins', sans-serif; font-size: 13px; cursor: pointer;}
         #cargando { font-size: 16px; text-align: center; color: var(--text-secondary); font-weight: 600;}
+
+        /* --- MODAL ALERTA PERSONALIZADO --- */
+        .custom-modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(53, 37, 26, 0.6); backdrop-filter: blur(4px);
+            z-index: 3000; display: none; align-items: center; justify-content: center;
+            padding: 20px; box-sizing: border-box;
+        }
+        .custom-modal-box {
+            background: var(--card-white); border-radius: 24px; padding: 30px 20px;
+            width: 100%; max-width: 320px; text-align: center;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2); border: 1px solid var(--border-warm);
+        }
+        .custom-modal-text { color: var(--brand-dark); font-size: 16px; margin-bottom: 25px; font-weight: 600; font-family: 'Poppins', sans-serif;}
+        .btn-modal-ok { width: 100%; background: var(--brand-dark); color: var(--brand-light); border: none; padding: 14px; border-radius: 16px; font-weight: 600; font-family: 'Poppins', sans-serif; cursor: pointer; }
     </style>
 </head>
 <body>
+
+    <div id="modalAlertaCustom" class="custom-modal-overlay">
+        <div class="custom-modal-box">
+            <div id="textoAlertaCustom" class="custom-modal-text">Mensaje de error</div>
+            <button id="btnCerrarAlerta" class="btn-modal-ok">Entendido</button>
+        </div>
+    </div>
 
     <div id="cargando">Abriendo Bruna...</div>
 
@@ -240,7 +262,6 @@
 
         class BrunaApp {
             constructor() {
-                // Configuración Firebase (Recuerda actualizarla con tus nuevas keys si vas a la versión Pro)
                 const firebaseConfig = {
                     apiKey: "AIzaSyCaqJraAXeZ8F4zCd9GUIdNIHhfU7FMzJk",
                     authDomain: "club-cafe-app.firebaseapp.com",
@@ -265,7 +286,10 @@
                     qr: document.getElementById('qrImage'),
                     gridSellos: document.getElementById('gridSellos'),
                     puntos: document.getElementById('displayPuntos'),
-                    premio: document.getElementById('displayPremio')
+                    premio: document.getElementById('displayPremio'),
+                    // Elementos del Modal
+                    modalAlerta: document.getElementById('modalAlertaCustom'),
+                    textoAlerta: document.getElementById('textoAlertaCustom')
                 };
 
                 this.vincularEventos();
@@ -275,6 +299,17 @@
             vincularEventos() {
                 document.getElementById('btnCrearTarjeta').addEventListener('click', () => this.ingresar());
                 document.getElementById('btnCerrarSesion').addEventListener('click', () => this.cerrarSesion());
+                
+                // Cerrar el modal al hacer clic en "Entendido"
+                document.getElementById('btnCerrarAlerta').addEventListener('click', () => {
+                    this.ui.modalAlerta.style.display = 'none';
+                });
+            }
+
+            // NUEVA FUNCIÓN: Mostrar Alertas Elegantes
+            mostrarAlerta(mensaje) {
+                this.ui.textoAlerta.innerText = mensaje;
+                this.ui.modalAlerta.style.display = 'flex';
             }
 
             iniciar() {
@@ -292,14 +327,21 @@
                 this.ui.tarjeta.style.display = pantalla === 'tarjeta' ? 'block' : 'none';
             }
 
+            // NUEVA FUNCIÓN: Formatear nombre (Primera en Mayúscula, resto minúscula)
+            formatearNombre(texto) {
+                if (!texto) return "";
+                return texto.trim().toLowerCase().replace(/\b\w/g, letra => letra.toUpperCase());
+            }
+
             async ingresar() {
-                const nombre = document.getElementById('inputNombre').value.trim();
+                const nombreIngresado = document.getElementById('inputNombre').value;
+                const nombre = this.formatearNombre(nombreIngresado); // Aplicamos el formato aquí
                 let celular = document.getElementById('inputCelular').value.trim();
 
-                if(!nombre || !celular) return alert("Por favor completa ambos datos");
+                if(!nombre || !celular) return this.mostrarAlerta("Por favor completa tu nombre y número para continuar.");
                 
                 celular = celular.replace(/\D/g,''); 
-                if(celular.length < 8) return alert("Ingresa un número de celular válido");
+                if(celular.length < 8) return this.mostrarAlerta("El número de WhatsApp es demasiado corto. Revisa que esté bien escrito.");
 
                 this.cambiarPantalla('cargando');
                 this.ui.cargando.innerText = "Sincronizando tarjeta...";
@@ -322,7 +364,7 @@
                     this.abrirTarjeta(celular);
                 } catch (e) {
                     console.error("Error:", e);
-                    alert("Hubo un error de conexión.");
+                    this.mostrarAlerta("Hubo un error de conexión. Revisa tu internet e intenta de nuevo.");
                     this.cambiarPantalla('registro');
                 }
             }
@@ -336,7 +378,7 @@
                 this.unsubscribe = onSnapshot(doc(this.db, "clientes", celular), (docSnap) => {
                     if (docSnap.exists()) {
                         const datos = docSnap.data();
-                        this.ui.nombre.innerText = datos.nombre;
+                        this.ui.nombre.innerText = datos.nombre; // Ahora siempre se verá bien (Ej: Simon)
                         this.renderizarTazas(datos.puntos);
                     } else {
                         this.cerrarSesion(); 
