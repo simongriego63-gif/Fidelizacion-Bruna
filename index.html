@@ -109,7 +109,8 @@
             position: relative;
             z-index: 1;
             width: 100%;
-            max-width: 400px;
+            max-width: 1000px;
+            margin: 0 auto;
         }
 
         /* === PANTALLA REGISTRO === */
@@ -126,6 +127,8 @@
             padding: 48px 32px;
             border: 1px solid rgba(229, 224, 218, 0.08);
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            max-width: 420px;
+            margin: 0 auto;
         }
 
         .logo-container {
@@ -699,25 +702,80 @@
             box-shadow: 0 8px 20px rgba(176, 155, 113, 0.3);
         }
 
-        /* === RESPONSIVE === */
+        /* === RESPONSIVE CELULAR === */
         @media (max-width: 380px) {
             .wallet-card { padding: 24px; }
             .stamps-grid { gap: 8px; }
             .stamp-cup { width: 38px; height: 38px; }
             .logo-small { font-size: 22px; }
         }
+
+        /* === VISTA DE COMPUTADORA (RESPONSIVE) === */
+        @media (min-width: 800px) {
+            .wallet-card {
+                display: grid;
+                grid-template-columns: 1.2fr 0.8fr;
+                grid-template-rows: auto auto auto;
+                gap: 20px 50px;
+                padding: 48px;
+            }
+
+            .card-header {
+                grid-column: 1 / -1; 
+                margin-bottom: 20px;
+            }
+
+            .stamps-container {
+                grid-column: 1 / 2;
+                grid-row: 2 / 4;
+                margin-bottom: 0;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+
+            .info-row {
+                grid-column: 2 / 3;
+                grid-row: 2 / 3;
+                margin-bottom: 0;
+                align-items: center;
+            }
+
+            .qr-section {
+                grid-column: 2 / 3;
+                grid-row: 3 / 4;
+                justify-content: center;
+            }
+
+            .stamps-grid {
+                gap: 16px;
+            }
+            
+            .stamp-cup {
+                width: 55px;
+                height: 55px;
+            }
+
+            .back {
+                min-height: 450px;
+            }
+
+            .btn-cerrar {
+                max-width: 400px;
+                margin: 40px auto 0 auto;
+                display: block;
+            }
+        }
     </style>
 </head>
 <body>
 
-    <!-- Fondo Aurora Animado -->
     <div class="aurora-bg">
         <div class="aurora-blob"></div>
         <div class="aurora-blob"></div>
         <div class="aurora-blob"></div>
     </div>
 
-    <!-- Modal de Alertas -->
     <div id="modalAlertaCustom" class="custom-modal-overlay">
         <div class="custom-modal-box">
             <div id="textoAlertaCustom" class="custom-modal-text">Mensaje de error</div>
@@ -728,7 +786,6 @@
     <div class="main-container">
         <div id="cargando">Preparando tu experiencia<span class="loading-dots"></span></div>
 
-        <!-- PANTALLA REGISTRO -->
         <div id="pantallaRegistro">
             <div class="registro-card">
                 <div class="logo-container">
@@ -753,13 +810,11 @@
             </div>
         </div>
 
-        <!-- PANTALLA TARJETA -->
         <div id="pantallaTarjeta">
             <p class="texto-girar">Toca la tarjeta para girarla</p>
             
             <div class="flip-container" onclick="this.classList.toggle('flipped')">
                 <div class="flipper">
-                    <!-- FRENTE -->
                     <div class="front">
                         <div class="wallet-card">
                             <div class="card-header">
@@ -796,7 +851,6 @@
                         </div>
                     </div>
                     
-                    <!-- DORSO -->
                     <div class="back">
                         <div class="back-logo-circle">
                             <h2 class="back-logo-text">BRUNA</h2>
